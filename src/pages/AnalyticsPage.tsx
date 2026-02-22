@@ -1,15 +1,32 @@
-import { Navigate } from 'react-router-dom';
+﻿import { Navigate } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMatching } from '@/hooks/useMatching';
 import { formatCurrency } from '@/hooks/useSavingsCalc';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
 
-const COLORS = ['hsl(160 84% 39%)', 'hsl(217 91% 60%)', 'hsl(38 92% 50%)', 'hsl(0 84% 60%)', 'hsl(280 67% 50%)'];
+const COLORS = [
+  'hsl(160 84% 39%)',
+  'hsl(217 91% 60%)',
+  'hsl(38 92% 50%)',
+  'hsl(0 84% 60%)',
+  'hsl(280 67% 50%)',
+];
 
 export default function AnalyticsPage() {
   const { user, isAuthenticated } = useAuth();
-  const matches = useMatching(user);
+  const { matches, loading, error } = useMatching(user);
 
   if (!isAuthenticated) return <Navigate to="/register" replace />;
 
@@ -32,10 +49,24 @@ export default function AnalyticsPage() {
   return (
     <PageLayout>
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <h1 className="text-2xl font-bold text-foreground mb-2">Savings Analytics</h1>
-        <p className="text-muted-foreground mb-8">Track your potential savings and partnership opportunities.</p>
+        <h1 className="mb-2 text-2xl font-bold text-foreground">Savings Analytics</h1>
+        <p className="mb-8 text-muted-foreground">
+          Track your potential savings and partnership opportunities.
+        </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        {loading && (
+          <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+            Running AI matching...
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+            AI matching failed: {error}
+          </div>
+        )}
+
+        <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-border bg-card p-5">
             <p className="text-sm text-muted-foreground">Total Potential Savings</p>
             <p className="text-2xl font-bold gradient-text">{formatCurrency(totalSavings)}</p>
@@ -46,14 +77,15 @@ export default function AnalyticsPage() {
           </div>
           <div className="rounded-xl border border-border bg-card p-5">
             <p className="text-sm text-muted-foreground">Avg Distance</p>
-            <p className="text-2xl font-bold text-foreground">{(matches.reduce((s, m) => s + m.distance, 0) / Math.max(matches.length, 1)).toFixed(1)} km</p>
+            <p className="text-2xl font-bold text-foreground">
+              {(matches.reduce((s, m) => s + m.distance, 0) / Math.max(matches.length, 1)).toFixed(1)} km
+            </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Bar Chart */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-border bg-card p-6">
-            <h3 className="font-semibold text-foreground mb-4">Savings by Partner</h3>
+            <h3 className="mb-4 font-semibold text-foreground">Savings by Partner</h3>
             <ResponsiveContainer width="100%" height={280}>
               <BarChart data={savingsData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(214 32% 91%)" />
@@ -65,12 +97,18 @@ export default function AnalyticsPage() {
             </ResponsiveContainer>
           </div>
 
-          {/* Pie Chart */}
           <div className="rounded-xl border border-border bg-card p-6">
-            <h3 className="font-semibold text-foreground mb-4">Market Category Split</h3>
+            <h3 className="mb-4 font-semibold text-foreground">Market Category Split</h3>
             <ResponsiveContainer width="100%" height={280}>
               <PieChart>
-                <Pie data={categoryData} cx="50%" cy="50%" outerRadius={100} dataKey="value" label={({ name, value }) => `${name}: ${value}%`}>
+                <Pie
+                  data={categoryData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  dataKey="value"
+                  label={({ name, value }) => `${name}: ${value}%`}
+                >
                   {categoryData.map((_, i) => (
                     <Cell key={i} fill={COLORS[i % COLORS.length]} />
                   ))}

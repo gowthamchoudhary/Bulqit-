@@ -1,33 +1,51 @@
+﻿import { useEffect, useState } from 'react';
 import { mockRetailers } from '@/data/mockRetailers';
 import { Retailer, MatchResult } from '@/types/retailer';
+import { findAIMatches } from '@/lib/aiMatching';
 
-export function useMatching(currentUser: Retailer | null) {
-  if (!currentUser) return [];
+type UseMatchingResult = {
+  matches: MatchResult[];
+  loading: boolean;
+  error: string | null;
+};
 
-  const matches: MatchResult[] = mockRetailers
-    .filter((r) => r.id !== currentUser.id)
-    .map((retailer) => {
-      const shared = retailer.products.filter((p) =>
-        currentUser.products.some((cp) => cp.toLowerCase() === p.toLowerCase())
-      );
-      const sameType = retailer.storeType === currentUser.storeType;
-      const matchScore = Math.min(
-        98,
-        Math.round(
-          (shared.length / Math.max(currentUser.products.length, 1)) * 60 +
-            (sameType ? 25 : 10) +
-            Math.random() * 10
-        )
-      );
-      const distance = +(Math.random() * 5 + 0.5).toFixed(1);
-      const estimatedSavings = Math.round(
-        currentUser.monthlyBudget * (matchScore / 100) * 0.18
-      );
+export function useMatching(currentUser: Retailer | null): UseMatchingResult {
+  const [matches, setMatches] = useState<MatchResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-      return { retailer, matchScore, distance, sharedProducts: shared, estimatedSavings };
-    })
-    .sort((a, b) => b.matchScore - a.matchScore)
-    .slice(0, 6);
+  useEffect(() => {
+    let cancelled = false;
 
-  return matches;
+    async function run() {
+      if (!currentUser) {
+        setMatches([]);
+        setLoading(false);
+        setError(null);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        const result = await findAIMatches(currentUser, mockRetailers);
+        if (!cancelled) setMatches(result);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to run AI matching');
+          setMatches([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser]);
+
+  return { matches, loading, error };
 }
