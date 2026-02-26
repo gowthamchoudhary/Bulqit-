@@ -1,9 +1,14 @@
 import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
+let groq: Groq | null = null;
+function getGroq() {
+  if (!groq) {
+    const key = import.meta.env.VITE_GROQ_API_KEY;
+    if (!key) return null;
+    groq = new Groq({ apiKey: key, dangerouslyAllowBrowser: true });
+  }
+  return groq;
+}
 
 export interface ChatContext {
   storeName?: string;
@@ -13,7 +18,10 @@ export interface ChatContext {
 }
 
 export async function chatWithAI(message: string, context: ChatContext) {
-  const response = await groq.chat.completions.create({
+  const client = getGroq();
+  if (!client) return 'AI assistant is not configured. Please set the GROQ API key.';
+
+  const response = await client.chat.completions.create({
     messages: [
       {
         role: 'system',
