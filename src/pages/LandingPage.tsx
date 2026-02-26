@@ -428,73 +428,69 @@ export default function LandingPage() {
       <div id="site" className={isSiteReady ? "show" : ""}>
         {isSiteReady && (
           <>
-            <nav className="bulqit-nav fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-18">
-                <div className="bulqit-nav-logo text-xl sm:text-2xl font-bold text-slate-900">Bulqit</div>
-                
-                {/* Desktop Menu */}
-                <ul className="bulqit-nav-links hidden lg:flex space-x-8">
-                  <li>
-                    <a
-                      href="#"
-                      className="text-slate-700 hover:text-slate-900 font-medium transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollToHowItWorks();
-                      }}
-                    >
-                      How it Works
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">For Retailers</a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="text-slate-700 hover:text-slate-900 font-medium transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate("/supplier/register");
-                      }}
-                    >
-                      Suppliers
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">Pricing</a>
-                  </li>
-                  <li>
-                    <a href="#" className="text-slate-700 hover:text-slate-900 font-medium transition-colors">FAQs</a>
-                  </li>
-                </ul>
+            <nav className="bulqit-nav">
+              <div className="bulqit-nav-logo">Bulqit</div>
 
-                {/* Desktop CTA Button */}
-                <button
-                  className="bulqit-nav-cta hidden lg:block bg-slate-900 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-black transition-colors shadow-md"
-                  onClick={() => navigate("/pricing")}
-                >
-                  Plans and Pricing
-                </button>
+              {/* Desktop Menu */}
+              <ul className="bulqit-nav-links hidden lg:flex">
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToHowItWorks();
+                    }}
+                  >
+                    How it Works
+                  </a>
+                </li>
+                <li>
+                  <a href="#">For Retailers</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/supplier/register");
+                    }}
+                  >
+                    Suppliers
+                  </a>
+                </li>
+                <li>
+                  <a href="#">Pricing</a>
+                </li>
+                <li>
+                  <a href="#">FAQs</a>
+                </li>
+              </ul>
 
-                {/* Mobile Menu Button */}
-                <button
-                  className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors z-50 relative"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  aria-label="Toggle menu"
-                >
-                  {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              </div>
+              {/* Desktop CTA Button */}
+              <button
+                className="bulqit-nav-cta hidden lg:block"
+                onClick={() => navigate("/pricing")}
+              >
+                Plans and Pricing
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                className="lg:hidden p-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
 
               {/* Mobile Menu Dropdown */}
               {mobileMenuOpen && (
-                <div className="lg:hidden absolute top-16 md:top-18 left-0 right-0 bg-white border-t border-slate-200 shadow-xl z-40 max-h-[calc(100vh-4rem)] overflow-y-auto">
-                  <ul className="flex flex-col py-2">
+                <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-50">
+                  <ul className="flex flex-col py-4">
                     <li>
                       <a
                         href="#"
-                        className="block px-6 py-3.5 text-base font-medium text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-100"
+                        className="block px-6 py-3 text-slate-700 hover:bg-slate-50 transition-colors"
                         onClick={(e) => {
                           e.preventDefault();
                           scrollToHowItWorks();
@@ -506,7 +502,7 @@ export default function LandingPage() {
                     <li>
                       <a
                         href="#"
-                        className="block px-6 py-3.5 text-base font-medium text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-100"
+                        className="block px-6 py-3 text-slate-700 hover:bg-slate-50 transition-colors"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         For Retailers
@@ -515,7 +511,7 @@ export default function LandingPage() {
                     <li>
                       <a
                         href="#"
-                        className="block px-6 py-3.5 text-base font-medium text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-100"
+                        className="block px-6 py-3 text-slate-700 hover:bg-slate-50 transition-colors"
                         onClick={(e) => {
                           e.preventDefault();
                           navigate("/supplier/register");
@@ -528,11 +524,8 @@ export default function LandingPage() {
                     <li>
                       <a
                         href="#"
-                        className="block px-6 py-3.5 text-base font-medium text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-100"
-                        onClick={() => {
-                          navigate("/pricing");
-                          setMobileMenuOpen(false);
-                        }}
+                        className="block px-6 py-3 text-slate-700 hover:bg-slate-50 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
                       >
                         Pricing
                       </a>
@@ -540,15 +533,15 @@ export default function LandingPage() {
                     <li>
                       <a
                         href="#"
-                        className="block px-6 py-3.5 text-base font-medium text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors border-b border-slate-100"
+                        className="block px-6 py-3 text-slate-700 hover:bg-slate-50 transition-colors"
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         FAQs
                       </a>
                     </li>
-                    <li className="px-6 py-4 bg-slate-50">
+                    <li className="px-6 pt-2">
                       <button
-                        className="w-full bg-slate-900 text-white px-6 py-3.5 rounded-lg font-semibold hover:bg-black active:bg-slate-800 transition-colors shadow-md text-base"
+                        className="w-full bulqit-nav-cta"
                         onClick={() => {
                           navigate("/pricing");
                           setMobileMenuOpen(false);
@@ -562,15 +555,17 @@ export default function LandingPage() {
               )}
             </nav>
 
-            <section className="bulqit-hero px-4 sm:px-6 lg:px-8 pt-24 md:pt-28 pb-12 md:pb-16">
+            <section className="bulqit-hero px-4 sm:px-6 lg:px-8">
               <div
-                className="bulqit-banner bulqit-fade-up bulqit-delay-1 text-xs sm:text-sm md:text-base cursor-pointer mx-auto max-w-fit"
+                className="bulqit-banner bulqit-fade-up bulqit-delay-1 text-xs sm:text-sm md:text-base cursor-pointer"
                 onClick={() => navigate("/dashboard")}
               >
                 <div className="bulqit-banner-badge">
                   <span>{"\u{1F525}"}</span> New
                 </div>
-                <span className="hidden sm:inline">Now live in Bangalore - </span>
+                <span className="hidden sm:inline">
+                  Now live in Bangalore -{" "}
+                </span>
                 <span className="sm:hidden">Bangalore - </span>
                 <span className="bulqit-banner-link">
                   500+ kirana stores joined
@@ -578,13 +573,13 @@ export default function LandingPage() {
                 <span className="bulqit-banner-arrow">›</span>
               </div>
 
-              <h1 className="bulqit-headline bulqit-fade-up bulqit-delay-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight">
+              <h1 className="bulqit-headline bulqit-fade-up bulqit-delay-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
                 A buying group
               </h1>
-              <div className="bulqit-headline bulqit-headline-line2 bulqit-fade-up bulqit-delay-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl flex-wrap justify-center items-center leading-tight">
+              <div className="bulqit-headline bulqit-headline-line2 bulqit-fade-up bulqit-delay-2 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl flex-wrap justify-center">
                 <span className="bulqit-headline-static">acting like a</span>
 
-                <div className="bulqit-rolling-wrapper mt-2 sm:mt-0 sm:ml-4">
+                <div className="bulqit-rolling-wrapper">
                   <span
                     className={`bulqit-rolling-pill-word ${isExiting ? "bulqit-word-exit" : "bulqit-word-enter"}`}
                     style={
@@ -605,7 +600,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              <p className="bulqit-subheadline bulqit-fade-up bulqit-delay-3 text-sm sm:text-base md:text-lg lg:text-xl px-2 sm:px-4 md:px-8 lg:px-16 max-w-5xl mx-auto leading-relaxed">
+              <p className="bulqit-subheadline bulqit-fade-up bulqit-delay-3 text-sm sm:text-base md:text-lg lg:text-xl px-2 sm:px-4 md:px-8 lg:px-16 max-w-5xl mx-auto">
                 Not your average procurement tool. <strong>Bulqit</strong> is an
                 AI-powered buying group that connects kirana stores, pharmacies
                 &amp; restaurants - slashing costs by <strong>15-40%</strong>{" "}
@@ -614,14 +609,14 @@ export default function LandingPage() {
 
               <div className="bulqit-cta-group bulqit-fade-up bulqit-delay-4 flex-col sm:flex-row gap-3 sm:gap-4 px-4 w-full max-w-2xl mx-auto">
                 <button
-                  className="bulqit-btn-primary w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4 flex items-center justify-center gap-2"
+                  className="bulqit-btn-primary w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
                   onClick={() => navigate("/register")}
                 >
                   <ArrowRight size={18} className="sm:w-5 sm:h-5" />
                   Join as a Retailer
                 </button>
                 <button
-                  className="bulqit-btn-secondary w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4 flex items-center justify-center gap-2"
+                  className="bulqit-btn-secondary w-full sm:w-auto text-sm sm:text-base px-6 py-3 sm:px-8 sm:py-4"
                   onClick={scrollToHowItWorks}
                 >
                   <div className="bulqit-btn-secondary-avatar">{"\u20B9"}</div>
@@ -630,100 +625,104 @@ export default function LandingPage() {
               </div>
 
               <div className="bulqit-features-strip bulqit-fade-up bulqit-delay-5 flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 px-4 max-w-6xl mx-auto">
-                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base w-full sm:w-auto">
+                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base">
                   <div className="bulqit-feature-icon">
                     <Users size={16} className="sm:w-5 sm:h-5" />
                   </div>
-                  <span>AI-Matched Buying Groups</span>
+                  <span className="whitespace-nowrap">
+                    AI-Matched Buying Groups
+                  </span>
                 </div>
-                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base w-full sm:w-auto">
+                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base">
                   <div className="bulqit-feature-icon">
                     <IndianRupee size={16} className="sm:w-5 sm:h-5" />
                   </div>
-                  <span>Save {"\u20B9"}15,000+ Per Month</span>
+                  <span className="whitespace-nowrap">
+                    Save {"\u20B9"}15,000+ Per Month
+                  </span>
                 </div>
-                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base w-full sm:w-auto">
+                <div className="bulqit-feature-item text-xs sm:text-sm md:text-base">
                   <div className="bulqit-feature-icon">
                     <Mail size={16} className="sm:w-5 sm:h-5" />
                   </div>
-                  <span>Instant AI Negotiation Emails</span>
+                  <span className="whitespace-nowrap">
+                    Instant AI Negotiation Emails
+                  </span>
                 </div>
               </div>
             </section>
 
-            <section id="how-it-works-section" className="w-full overflow-hidden">
+            <section id="how-it-works-section">
               <HowItWorksPage />
             </section>
 
             {/* Real Results & AI Negotiator Section */}
-            <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-white via-slate-50 to-indigo-50 px-4 sm:px-6">
+            <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-white via-slate-50 to-indigo-50 px-4 sm:px-6">
               <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
-                <div className="text-center space-y-3 sm:space-y-4">
-                  <Badge className="mb-2 bg-emerald-500/90 text-white shadow-sm text-xs sm:text-sm px-3 py-1">
+                <div className="text-center space-y-3">
+                  <Badge className="mb-2 bg-emerald-500/90 text-white shadow-sm text-xs sm:text-sm">
                     Real Results from Demo Users
                   </Badge>
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight px-4 leading-tight">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight px-4">
                     Bulqit is already negotiating better deals for retailers
                     like you
                   </h2>
-                  <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto px-4 leading-relaxed">
+                  <p className="text-sm sm:text-base md:text-lg text-slate-600 max-w-2xl mx-auto px-4">
                     Live numbers from our demo cohorts — total savings, active
                     users, AI negotiation success rate and more.
                   </p>
                 </div>
 
-                {/* Stats + AI negotiator highlight - Mobile: Stack, Desktop: Side by side */}
+                {/* Stats + AI negotiator highlight */}
                 <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.25fr)] items-stretch">
-                  {/* Stats Cards - Mobile: Single column, Desktop: 3 columns */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-4 lg:gap-4">
-                    <Card className="p-5 sm:p-6 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-none shadow-lg col-span-1">
-                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+                    <Card className="p-4 sm:p-5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-none shadow-lg">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide opacity-90 mb-1">
                         Total Savings
                       </div>
-                      <div className="text-3xl sm:text-4xl lg:text-4xl font-extrabold">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
                         {"\u20B9"}2.4Cr
                       </div>
-                      <div className="text-xs mt-2 opacity-90">
+                      <div className="text-[10px] sm:text-xs mt-2 opacity-90">
                         Across all demo buying groups
                       </div>
                     </Card>
-                    <Card className="p-5 sm:p-6 bg-gradient-to-br from-sky-500 to-sky-600 text-white border-none shadow-lg col-span-1">
-                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                    <Card className="p-4 sm:p-5 bg-gradient-to-br from-sky-500 to-sky-600 text-white border-none shadow-lg">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide opacity-90 mb-1">
                         Active Retailers
                       </div>
-                      <div className="text-3xl sm:text-4xl lg:text-4xl font-extrabold">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
                         500+
                       </div>
-                      <div className="text-xs mt-2 opacity-90">
+                      <div className="text-[10px] sm:text-xs mt-2 opacity-90">
                         Kirana, medical &amp; restaurant stores
                       </div>
                     </Card>
-                    <Card className="p-5 sm:p-6 bg-gradient-to-br from-violet-500 to-indigo-600 text-white border-none shadow-lg col-span-1 sm:col-span-2 lg:col-span-1">
-                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                    <Card className="p-4 sm:p-5 bg-gradient-to-br from-violet-500 to-indigo-600 text-white border-none shadow-lg md:col-span-1 col-span-2 md:col-auto">
+                      <div className="text-[10px] sm:text-xs uppercase tracking-wide opacity-90 mb-1">
                         AI Deal Success
                       </div>
-                      <div className="text-3xl sm:text-4xl lg:text-4xl font-extrabold">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
                         87%
                       </div>
-                      <div className="text-xs mt-2 opacity-90">
+                      <div className="text-[10px] sm:text-xs mt-2 opacity-90">
                         AI-negotiated emails that improved pricing
                       </div>
                     </Card>
                   </div>
 
-                  {/* AI Negotiator Card */}
                   <Card className="relative overflow-hidden border border-indigo-100/80 bg-white/70 backdrop-blur-sm shadow-lg">
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-sky-500/5 to-emerald-500/5 pointer-events-none" />
-                    <div className="relative p-5 sm:p-6 lg:p-7 space-y-4">
-                      <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 border border-indigo-100">
-                        <Sparkles className="w-4 h-4" />
+                    <div className="relative p-5 sm:p-6 space-y-3 sm:space-y-4">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-[10px] sm:text-xs font-medium text-indigo-700 border border-indigo-100">
+                        <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
                         AI Negotiator
                       </div>
-                      <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold flex items-center gap-2">
-                        <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-600" />
+                      <h3 className="text-base sm:text-lg md:text-xl font-semibold flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600" />
                         See how AI writes your supplier emails
                       </h3>
-                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-slate-600">
                         Bulqit&apos;s AI Negotiation Center turns your order
                         details into a polished, B2B-ready email that gets
                         better discounts — usually in under{" "}
@@ -732,27 +731,29 @@ export default function LandingPage() {
                         </span>
                         .
                       </p>
-                      <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                        <div className="rounded-xl bg-slate-900 text-slate-50 px-3 sm:px-4 py-3 sm:py-4">
-                          <div className="opacity-80 mb-1">Avg. Rating</div>
-                          <div className="text-xl sm:text-2xl font-semibold">
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="rounded-xl bg-slate-900 text-slate-50 px-3 py-2 sm:py-3">
+                          <div className="opacity-80 mb-1 text-[10px] sm:text-xs">
+                            Avg. Rating
+                          </div>
+                          <div className="text-base sm:text-lg font-semibold">
                             4.8
-                            <span className="align-middle text-amber-300 ml-1">
+                            <span className="align-middle text-amber-300">
                               {"\u2605"}
                             </span>
                           </div>
-                          <div className="mt-1 text-[11px] opacity-80">
+                          <div className="mt-1 text-[10px] opacity-80">
                             From demo user feedback
                           </div>
                         </div>
-                        <div className="rounded-xl bg-slate-100 px-3 sm:px-4 py-3 sm:py-4">
-                          <div className="text-slate-500 mb-1">
+                        <div className="rounded-xl bg-slate-100 px-3 py-2 sm:py-3">
+                          <div className="text-slate-500 mb-1 text-[10px] sm:text-xs">
                             Negotiation Speed
                           </div>
-                          <div className="text-xl sm:text-2xl font-semibold text-slate-900">
+                          <div className="text-base sm:text-lg font-semibold text-slate-900">
                             2.8s
                           </div>
-                          <div className="mt-1 text-[11px] text-slate-500">
+                          <div className="mt-1 text-[10px] text-slate-500">
                             Avg. email generation time
                           </div>
                         </div>
@@ -760,24 +761,24 @@ export default function LandingPage() {
                       <button
                         type="button"
                         onClick={() => navigate("/register")}
-                        className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-slate-50 px-5 py-3 text-sm font-medium shadow-md hover:bg-black active:bg-slate-800 transition-colors w-full sm:w-auto justify-center"
+                        className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-slate-50 px-4 py-2 text-xs font-medium shadow-md hover:bg-black transition-colors w-full sm:w-auto justify-center"
                       >
                         Try the AI Negotiator
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
                   </Card>
                 </div>
 
-                {/* Demo user quotes - Mobile: 1 col, Tablet: 2 cols, Desktop: 3 cols */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+                {/* Demo user quotes */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {mockTestimonials.map((testimonial) => (
                     <Card
                       key={testimonial.id}
                       className="p-5 sm:p-6 border border-slate-200/80 bg-white/80 backdrop-blur-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-200"
                     >
                       <div className="flex items-start gap-3 sm:gap-4 mb-4">
-                        <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-slate-900 text-2xl shadow-sm flex-shrink-0">
+                        <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-slate-900 text-xl sm:text-2xl shadow-sm flex-shrink-0">
                           {testimonial.photo}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -786,16 +787,16 @@ export default function LandingPage() {
                               {testimonial.name}
                             </h3>
                             {testimonial.verified && (
-                              <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500 flex-shrink-0" />
                             )}
                           </div>
-                          <div className="text-xs text-slate-500 truncate">
+                          <div className="text-[10px] sm:text-xs text-slate-500 truncate">
                             {testimonial.storeName}
                           </div>
                           <div className="flex items-center gap-1 mt-1">
                             <Badge
                               variant="outline"
-                              className="text-[10px] sm:text-xs px-2 py-0.5 border-slate-200 text-slate-700"
+                              className="text-[10px] px-2 py-0.5 border-slate-200 text-slate-700"
                             >
                               {testimonial.storeType}
                             </Badge>
@@ -804,30 +805,33 @@ export default function LandingPage() {
                       </div>
 
                       <div className="relative mb-4">
-                        <Quote className="w-7 h-7 sm:w-8 sm:h-8 text-slate-200 absolute -top-2 -left-2" />
-                        <p className="text-sm text-slate-700 italic pl-5 sm:pl-6 leading-relaxed">
+                        <Quote className="w-6 h-6 sm:w-8 sm:h-8 text-slate-200 absolute -top-2 -left-2" />
+                        <p className="text-xs sm:text-sm text-slate-700 italic pl-4 sm:pl-6 leading-relaxed">
                           "{testimonial.quote}"
                         </p>
                       </div>
 
                       <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-slate-100">
                         <div>
-                          <div className="text-xs text-slate-500">
+                          <div className="text-[10px] sm:text-xs text-slate-500">
                             Monthly Savings
                           </div>
-                          <div className="text-lg sm:text-xl font-semibold text-emerald-600">
+                          <div className="text-base sm:text-lg font-semibold text-emerald-600">
                             {"\u20B9"}
                             {testimonial.savings.toLocaleString()}
                           </div>
                         </div>
                         <div className="flex text-amber-400">
                           {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-current" />
+                            <Star
+                              key={i}
+                              className="w-3 h-3 sm:w-4 sm:h-4 fill-current"
+                            />
                           ))}
                         </div>
                       </div>
 
-                      <div className="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                      <div className="text-[10px] sm:text-[11px] text-slate-500 mt-3 flex items-center gap-1">
                         <span>{"\u{1F4CD}"}</span>
                         <span className="truncate">{testimonial.location}</span>
                       </div>
