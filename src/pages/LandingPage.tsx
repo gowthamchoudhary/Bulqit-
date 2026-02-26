@@ -458,12 +458,6 @@ export default function LandingPage() {
                     Suppliers
                   </a>
                 </li>
-                <li>
-                  <a href="#">Pricing</a>
-                </li>
-                <li>
-                  <a href="#">FAQs</a>
-                </li>
               </ul>
 
               {/* Desktop CTA Button */}
