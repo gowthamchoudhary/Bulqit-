@@ -57,9 +57,15 @@ export function useProductGroups() {
     const userGroups = localStorage.getItem(USER_GROUPS_KEY);
     if (userGroups) {
       try {
-        setUserGroupIds(JSON.parse(userGroups));
+        const parsed = JSON.parse(userGroups);
+        if (Array.isArray(parsed)) {
+          setUserGroupIds(parsed);
+        } else {
+          localStorage.removeItem(USER_GROUPS_KEY);
+        }
       } catch (e) {
         console.error('Failed to load user groups:', e);
+        localStorage.removeItem(USER_GROUPS_KEY);
       }
     }
   }, []);

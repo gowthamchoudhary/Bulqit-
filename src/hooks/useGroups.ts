@@ -11,9 +11,16 @@ export function useGroups() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        setGroups(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          setGroups(parsed);
+        } else {
+          console.error('Invalid groups data in localStorage, clearing');
+          localStorage.removeItem(STORAGE_KEY);
+        }
       } catch (e) {
         console.error('Failed to load groups:', e);
+        localStorage.removeItem(STORAGE_KEY);
       }
     }
   }, []);

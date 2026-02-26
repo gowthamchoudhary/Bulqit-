@@ -461,7 +461,7 @@ export function NegotiationCenterPage() {
                 >
                   {[
                     { label: "Rating", val: `${supplier.rating}★` },
-                    { label: "Category", val: supplier.category },
+                    { label: "Category", val: supplier.type },
                     { label: "Type", val: supplier.type },
                   ].map((info) => (
                     <div key={info.label}>

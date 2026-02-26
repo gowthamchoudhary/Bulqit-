@@ -1,5 +1,7 @@
 import { ProductPricing, DiscountTier } from "./productGroup";
 
+export type { DiscountTier };
+
 export interface SupplierProfile {
   // Basic Info
   id: string;

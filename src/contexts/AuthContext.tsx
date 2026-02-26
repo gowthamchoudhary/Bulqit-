@@ -29,14 +29,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<Retailer | null>(null);
 
   useEffect(() => {
-    i18n.changeLanguage(getStoredLanguage());
-    const stored = getUser();
-    if (stored) {
-      setUser(stored);
-      if (stored.languagePreference && SUPPORTED_LANGUAGES.includes(stored.languagePreference as SupportedLanguage)) {
-        setStoredLanguage(stored.languagePreference as SupportedLanguage);
-        i18n.changeLanguage(stored.languagePreference);
+    try {
+      i18n.changeLanguage(getStoredLanguage());
+      const stored = getUser();
+      if (stored) {
+        setUser(stored);
+        if (stored.languagePreference && SUPPORTED_LANGUAGES.includes(stored.languagePreference as SupportedLanguage)) {
+          setStoredLanguage(stored.languagePreference as SupportedLanguage);
+          i18n.changeLanguage(stored.languagePreference);
+        }
       }
+    } catch (e) {
+      console.error('Failed to restore user session:', e);
     }
   }, []);
 
@@ -64,8 +68,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const fallbackAuth: AuthContextType = {
+  user: null,
+  login: () => {},
+  logout: () => {},
+  isAuthenticated: false,
+};
+
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  if (!ctx) {
+    console.warn('useAuth called outside AuthProvider – returning fallback');
+    return fallbackAuth;
+  }
   return ctx;
 }
