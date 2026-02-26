@@ -68,8 +68,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
+const fallbackAuth: AuthContextType = {
+  user: null,
+  login: () => {},
+  logout: () => {},
+  isAuthenticated: false,
+};
+
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  if (!ctx) {
+    console.warn('useAuth called outside AuthProvider – returning fallback');
+    return fallbackAuth;
+  }
   return ctx;
 }
