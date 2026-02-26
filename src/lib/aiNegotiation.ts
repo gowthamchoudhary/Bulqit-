@@ -1,9 +1,14 @@
-﻿import Groq from 'groq-sdk';
+import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true, // For demo purposes
-});
+let groq: Groq | null = null;
+function getGroq() {
+  if (!groq) {
+    const key = import.meta.env.VITE_GROQ_API_KEY;
+    if (!key) return null;
+    groq = new Groq({ apiKey: key, dangerouslyAllowBrowser: true });
+  }
+  return groq;
+}
 
 export interface NegotiationRequest {
   groupName: string;
@@ -56,7 +61,9 @@ Requirements:
 Generate ONLY the email body (no subject line yet). Make it compelling and likely to get a positive response.`;
 
   try {
-    const completion = await groq.chat.completions.create({
+    const client = getGroq();
+    if (!client) return generateFallbackEmail(request);
+    const completion = await client.chat.completions.create({
       messages: [
         {
           role: 'system',
@@ -76,7 +83,7 @@ Generate ONLY the email body (no subject line yet). Make it compelling and likel
     const emailBody = completion.choices[0]?.message?.content || '';
 
     // Generate subject line
-    const subjectCompletion = await groq.chat.completions.create({
+    const subjectCompletion = await client.chat.completions.create({
       messages: [
         {
           role: 'user',
