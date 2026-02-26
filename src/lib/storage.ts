@@ -7,23 +7,22 @@ const KEYS = {
   EMAILS: 'bulkbridge_emails',
 };
 
-// Zod schemas for runtime validation
+// Lenient Zod schemas - use passthrough and optional fields for resilience
 const RetailerSchema = z.object({
   id: z.string(),
   storeName: z.string(),
-  storeType: z.enum(['Medical', 'Kirana', 'Restaurant', 'Stationery', 'Electronics']),
+  storeType: z.string(),
   location: z.object({
-    address: z.string(),
+    address: z.string().optional().default(''),
     city: z.string().optional(),
     state: z.string().optional(),
     pincode: z.string().optional(),
-    coordinates: z.object({ lat: z.number(), lng: z.number() }),
-  }),
-  products: z.array(z.string()),
-  monthlyBudget: z.number(),
-  phone: z.string(),
-  joinedDate: z.string(),
-  languagePreference: z.string().optional(),
+    coordinates: z.object({ lat: z.number(), lng: z.number() }).optional().default({ lat: 0, lng: 0 }),
+  }).optional().default({ address: '' }),
+  products: z.array(z.string()).optional().default([]),
+  monthlyBudget: z.number().optional().default(0),
+  phone: z.string().optional().default(''),
+  joinedDate: z.string().optional().default(new Date().toISOString()),
 }).passthrough();
 
 const BuyingGroupMemberSchema = z.object({
