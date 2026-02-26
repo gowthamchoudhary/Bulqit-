@@ -1,7 +1,10 @@
 ﻿import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductGroup } from '@/types/productGroup';
 import { getGroupUrgencyBadge, formatNextOrderDate } from '@/lib/productGroupActions';
 import { Star, Clock, Users, TrendingDown, CheckCircle, LogOut } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '@/lib/formatters';
 
 const T = {
   bg: '#F0EFED',
@@ -32,24 +35,14 @@ interface ProductGroupCardProps {
 }
 
 export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGroupCardProps) {
-  const [isLoading, setIsLoading] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const urgencyBadge = getGroupUrgencyBadge(group);
   const progress = Math.min((group.currentMembers / group.targetMembers) * 100, 100);
   const nextOrderLabel = formatNextOrderDate(group.nextOrderDate);
   const uc = urgencyBadge ? urgencyMap[urgencyBadge.color] ?? urgencyMap.green : null;
-
-  const handleJoin = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, 500));
-      onJoin();
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const cardShadow = isJoined
     ? `0 0 0 1.5px ${T.gold}, 0 8px 32px rgba(255,184,0,0.10), 0 2px 8px rgba(0,0,0,0.05)`
@@ -140,7 +133,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
               letterSpacing: '0.06em',
             }}
           >
-            OFF
+            {t('common.off')}
           </div>
         </div>
       </div>
@@ -173,7 +166,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 600, color: T.textDark }}>
             <Users size={13} color={T.textMid} />
-            {group.currentMembers} / {group.targetMembers} members
+            {t('groupCard.members', { current: group.currentMembers, target: group.targetMembers })}
           </span>
           <span
             style={{
@@ -186,7 +179,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
               border: `1px solid ${T.borderDash}`,
             }}
           >
-            {group.spotsLeft} left
+            {t('common.spotsLeft', { count: group.spotsLeft })}
           </span>
         </div>
 
@@ -238,7 +231,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
             Regular
           </div>
           <div style={{ fontSize: 17, fontWeight: 700, color: T.textLight, textDecoration: 'line-through' }}>
-            ₹{group.regularPrice}
+            {formatCurrency(group.regularPrice, i18n.language)}
           </div>
         </div>
         <div style={{ background: T.textDark, borderRadius: 12, padding: '12px 14px' }}>
@@ -252,9 +245,9 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
               letterSpacing: '0.05em',
             }}
           >
-            Group Price
+            {t('groupCard.groupPrice')}
           </div>
-          <div style={{ fontSize: 17, fontWeight: 800, color: T.gold }}>₹{group.groupPrice}</div>
+          <div style={{ fontSize: 17, fontWeight: 800, color: T.gold }}>{formatCurrency(group.groupPrice, i18n.language)}</div>
         </div>
       </div>
 
@@ -292,9 +285,9 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
               lineHeight: 1,
             }}
           >
-            ₹{group.savingsPerOrder.toLocaleString()}
+            {formatCurrency(group.savingsPerOrder, i18n.language)}
           </div>
-          <div style={{ fontSize: 11, color: '#7A5800', marginTop: 3 }}>per order</div>
+          <div style={{ fontSize: 11, color: '#7A5800', marginTop: 3 }}>{t('common.perOrder')}</div>
         </div>
         <div
           style={{
@@ -325,7 +318,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: 13 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 6, color: T.textMid }}>
             <Clock size={13} color={T.textLight} />
-            Next order: <strong style={{ color: T.textDark }}>{group.nextOrderDay}</strong>
+            {t('groupCard.nextOrder')} <strong style={{ color: T.textDark }}>{group.nextOrderDay}</strong>
           </span>
           <span
             style={{
@@ -345,11 +338,11 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}>
           <Star size={13} fill={T.gold} color={T.gold} />
           <span style={{ fontWeight: 600, color: T.textDark }}>{group.supplierName}</span>
-          <span style={{ color: T.textLight }}>({group.supplierRating}★)</span>
+          <span style={{ color: T.textLight }}>({group.supplierRating}*)</span>
         </div>
 
         <div style={{ fontSize: 12, color: T.textLight }}>
-          Min order: {group.minQuantity} {group.unit} · {group.orderFrequency}
+          {t('common.minOrder')}: {group.minQuantity} {group.unit} · {group.orderFrequency}
         </div>
       </div>
 
@@ -370,7 +363,7 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
               color: '#7A5800',
             }}
           >
-            <CheckCircle size={15} color={T.gold} strokeWidth={2.5} /> Joined
+            <CheckCircle size={15} color={T.gold} strokeWidth={2.5} /> {t('groupCard.alreadyJoined')}
           </div>
 
           {onLeave && (
@@ -404,61 +397,44 @@ export function ProductGroupCard({ group, isJoined, onJoin, onLeave }: ProductGr
                 e.currentTarget.style.background = 'transparent';
               }}
             >
-              <LogOut size={13} /> Leave Group
+              <LogOut size={13} /> {t('groupCard.leaveGroup')}
             </button>
           )}
         </div>
       ) : (
         <button
-          onClick={handleJoin}
-          disabled={isLoading}
+          onClick={() => navigate(`/group/${group.id}`)}
           style={{
             width: '100%',
             padding: '13px',
             borderRadius: 100,
             border: 'none',
-            background: isLoading ? '#E8E7E4' : T.textDark,
-            color: isLoading ? T.textLight : '#fff',
+            background: T.textDark,
+            color: '#fff',
             fontSize: 14,
             fontWeight: 700,
-            cursor: isLoading ? 'not-allowed' : 'pointer',
+            cursor: 'pointer',
             fontFamily: T.font,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: 8,
-            boxShadow: isLoading ? 'none' : '0 2px 14px rgba(0,0,0,0.18)',
+            boxShadow: '0 2px 14px rgba(0,0,0,0.18)',
             transition: 'background 0.15s, box-shadow 0.15s',
           }}
           onMouseEnter={(e) => {
-            if (!isLoading) e.currentTarget.style.background = '#2a2a2a';
+            e.currentTarget.style.background = '#2a2a2a';
           }}
           onMouseLeave={(e) => {
-            if (!isLoading) e.currentTarget.style.background = T.textDark;
+            e.currentTarget.style.background = T.textDark;
           }}
         >
-          {isLoading ? (
-            <>
-              <span
-                style={{
-                  width: 13,
-                  height: 13,
-                  border: '2px solid rgba(0,0,0,0.15)',
-                  borderTopColor: T.textMid,
-                  borderRadius: '50%',
-                  animation: 'spin 0.7s linear infinite',
-                  display: 'inline-block',
-                }}
-              />
-              Joining...
-            </>
-          ) : (
-            'Join Group ->'
-          )}
+          {t('groupCard.joinGroup')}
         </button>
       )}
-
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
+
+
+

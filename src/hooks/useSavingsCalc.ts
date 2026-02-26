@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+
 export function calculateSavings(yourValue: number, partnerValue: number) {
   const total = yourValue + partnerValue;
   let discountPercent = 0;
@@ -14,5 +16,7 @@ export function calculateSavings(yourValue: number, partnerValue: number) {
 }
 
 export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+  const lang = (i18n.language || 'en').split('-')[0];
+  const locale = lang === 'en' ? 'en-IN' : `${lang}-IN`;
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
 }

@@ -7,12 +7,19 @@ import LandingPage from "./pages/LandingPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import GroupFormPage from "./pages/GroupFormPage";
+import { GroupDetailsPage } from "./pages/GroupDetailsPage";
+import { PaymentPage } from "./pages/PaymentPage";
 import EmailResultPage from "./pages/EmailResultPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import { SuppliersPage } from "./pages/SuppliersPage";
 import { BuyersDirectoryPage } from "./pages/BuyersDirectoryPage";
 import NotFound from "./pages/NotFound";
 import { HowItWorksPage } from "./pages/HowItWorksPage";
+import { NegotiationCenterPage } from "./pages/NegotiationCenterPage";
+import { AboutPage } from "./pages/AboutPage";
+import { PricingPage } from "./pages/PricingPage";
+import { AIChatWidget } from "./components/features/AIChatWidget";
+import { SavingsCalculatorPage } from "./pages/SavingsCalculatorPage";
 
 const queryClient = new QueryClient();
 
@@ -27,13 +34,20 @@ const App = () => (
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/group-form" element={<GroupFormPage />} />
+            <Route path="/group/:groupId" element={<GroupDetailsPage />} />
+            <Route path="/payment/:groupId" element={<PaymentPage />} />
             <Route path="/email-result" element={<EmailResultPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/suppliers" element={<SuppliersPage />} />
             <Route path="/buyers" element={<BuyersDirectoryPage />} />
+            <Route path="/negotiate" element={<NegotiationCenterPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/savings-calculator" element={<SavingsCalculatorPage />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIChatWidget />
         </BrowserRouter>
       </AuthProvider>
     </TooltipProvider>

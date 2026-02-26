@@ -1,7 +1,10 @@
 ﻿import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Mail, Users, IndianRupee } from 'lucide-react';
+import { ArrowRight, Mail, Users, IndianRupee, Star, Quote, CheckCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { HowItWorksPage } from './HowItWorksPage';
+import { mockTestimonials } from '@/data/mockTestimonials';
 
 type RollingWord = {
   text: string;
@@ -373,7 +376,7 @@ export default function LandingPage() {
             <li><a href="#">Pricing</a></li>
             <li><a href="#">FAQs</a></li>
           </ul>
-          <button className="bulqit-nav-cta" onClick={() => navigate('/dashboard')}>Plans and Pricing</button>
+          <button className="bulqit-nav-cta" onClick={() => navigate('/pricing')}>Plans and Pricing</button>
         </nav>
 
         <section className="bulqit-hero">
@@ -436,6 +439,89 @@ export default function LandingPage() {
 
         <section id="how-it-works-section">
           <HowItWorksPage />
+        </section>
+
+        {/* Testimonials Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-green-500">Real Results</Badge>
+              <h2 className="text-4xl font-bold mb-4">
+                Trusted by 500+ Retailers Across Bengaluru
+              </h2>
+              <p className="text-xl text-gray-600">
+                Join thousands of small businesses saving 15-20% on every order
+              </p>
+            </div>
+
+            {/* Stats Banner */}
+            <div className="grid grid-cols-4 gap-6 mb-12">
+              <Card className="p-6 text-center bg-gradient-to-br from-green-500 to-green-600 text-white">
+                <div className="text-4xl font-bold mb-2">{'\u20B9'}2.4Cr</div>
+                <div className="text-sm opacity-90">Total Savings Generated</div>
+              </Card>
+              <Card className="p-6 text-center bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                <div className="text-4xl font-bold mb-2">500+</div>
+                <div className="text-sm opacity-90">Active Retailers</div>
+              </Card>
+              <Card className="p-6 text-center bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+                <div className="text-4xl font-bold mb-2">87%</div>
+                <div className="text-sm opacity-90">Success Rate</div>
+              </Card>
+              <Card className="p-6 text-center bg-gradient-to-br from-yellow-500 to-orange-500 text-white">
+                <div className="text-4xl font-bold mb-2">4.8{'\u2605'}</div>
+                <div className="text-sm opacity-90">Average Rating</div>
+              </Card>
+            </div>
+
+            {/* Testimonial Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {mockTestimonials.map(testimonial => (
+                <Card key={testimonial.id} className="p-6 hover:shadow-xl transition-all">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="text-5xl">{testimonial.photo}</div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="font-bold">{testimonial.name}</h3>
+                        {testimonial.verified && (
+                          <CheckCircle className="w-4 h-4 text-blue-500" />
+                        )}
+                      </div>
+                      <div className="text-sm text-gray-600">{testimonial.storeName}</div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <Badge variant="outline" className="text-xs">{testimonial.storeType}</Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="relative mb-4">
+                    <Quote className="w-8 h-8 text-gray-200 absolute -top-2 -left-2" />
+                    <p className="text-gray-700 italic pl-6">
+                      "{testimonial.quote}"
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-4 border-t">
+                    <div>
+                      <div className="text-sm text-gray-600">Monthly Savings</div>
+                      <div className="text-xl font-bold text-green-600">
+                        {'\u20B9'}{testimonial.savings.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-gray-500 mt-2">
+                    {'\u{1F4CD}'} {testimonial.location}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
         </section>
           </>
         )}

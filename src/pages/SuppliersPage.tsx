@@ -1,8 +1,11 @@
-import { useState, type ReactNode } from 'react';
+﻿import { useState, type ReactNode } from 'react';
 import { getSuppliersByCategory, mockSuppliers } from '@/data/mockSuppliers';
 import { Supplier } from '@/types/supplier';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Star, MapPin, Package, CheckCircle, Search, ShoppingCart, ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '@/lib/formatters';
+import { DemoModeBanner } from '@/components/features/DemoModeBanner';
 
 const T = {
   bg: '#F0EFED',
@@ -28,6 +31,7 @@ const typeStyle: Record<string, { bg: string; color: string; border: string }> =
 type SupplierSortBy = 'rating' | 'orders';
 
 export function SuppliersPage() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
@@ -104,9 +108,9 @@ export function SuppliersPage() {
                 letterSpacing: '0.04em',
               }}
             >
-              All Verified
+              {t('common.verified')}
             </span>
-            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }}>GST · Licences · Quality checks</span>
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.55)' }}>GST Â· Licences Â· Quality checks</span>
           </div>
 
           <h1
@@ -119,7 +123,7 @@ export function SuppliersPage() {
               lineHeight: 1.08,
             }}
           >
-            Verified Suppliers
+            {t('suppliers.heroTitle')}
           </h1>
           <p
             style={{
@@ -130,11 +134,11 @@ export function SuppliersPage() {
               marginBottom: 28,
             }}
           >
-            Pre-vetted, trusted suppliers with competitive bulk pricing - ready for your buying groups.
+            {t('suppliers.heroSub')}
           </p>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {['GST Verified', 'Quality Certified', 'Secure Payments'].map((label) => (
+            {[t('suppliers.gstVerified'), t('suppliers.qualityCertified'), t('suppliers.securePayments')].map((label) => (
               <div
                 key={label}
                 style={{
@@ -158,6 +162,9 @@ export function SuppliersPage() {
       </div>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(16px, 3vw, 32px)' }}>
+        <div style={{ marginBottom: 16 }}>
+          <DemoModeBanner />
+        </div>
         <div
           style={{
             background: T.bgWhite,
@@ -182,7 +189,7 @@ export function SuppliersPage() {
                 style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
               />
               <input
-                placeholder="Search suppliers or products..."
+                placeholder={t('suppliers.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -207,21 +214,21 @@ export function SuppliersPage() {
               />
             </div>
 
-            <StyledSelect value={selectedCategory} onChange={setSelectedCategory} placeholder="All Categories">
+            <StyledSelect value={selectedCategory} onChange={setSelectedCategory} placeholder={t('suppliers.allCategories')}>
               <SelectContent>
                 {['all', 'Medical', 'Kirana', 'Restaurant', 'Stationery', 'Electronics'].map((c) => (
                   <SelectItem key={c} value={c}>
-                    {c === 'all' ? 'All Categories' : c}
+                    {c === 'all' ? t('suppliers.allCategories') : c}
                   </SelectItem>
                 ))}
               </SelectContent>
             </StyledSelect>
 
-            <StyledSelect value={selectedType} onChange={setSelectedType} placeholder="All Types">
+            <StyledSelect value={selectedType} onChange={setSelectedType} placeholder={t('suppliers.allTypes')}>
               <SelectContent>
-                {['all', 'wholesaler', 'distributor', 'manufacturer'].map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t === 'all' ? 'All Types' : t.charAt(0).toUpperCase() + t.slice(1)}
+                {['all', 'wholesaler', 'distributor', 'manufacturer'].map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type === 'all' ? t('suppliers.allTypes') : type === 'wholesaler' ? t('suppliers.wholesaler') : type === 'distributor' ? t('suppliers.distributor') : t('suppliers.manufacturer')}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -241,14 +248,14 @@ export function SuppliersPage() {
             }}
           >
             <span style={{ fontSize: 13, color: T.textMid }}>
-              Found <strong style={{ color: T.textDark }}>{sortedSuppliers.length}</strong> verified suppliers
+              {t('suppliers.foundSuppliers', { count: sortedSuppliers.length })}
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 13, color: T.textLight }}>Sort by:</span>
+              <span style={{ fontSize: 13, color: T.textLight }}>{t('common.sortBy')}</span>
               <StyledSelect value={sortBy} onChange={(v) => setSortBy(v as SupplierSortBy)} placeholder="Sort">
                 <SelectContent>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
-                  <SelectItem value="orders">Most Orders</SelectItem>
+                  <SelectItem value="rating">{t('suppliers.highestRated')}</SelectItem>
+                  <SelectItem value="orders">{t('suppliers.mostOrders')}</SelectItem>
                 </SelectContent>
               </StyledSelect>
             </div>
@@ -278,8 +285,8 @@ export function SuppliersPage() {
             }}
           >
             <Package size={48} color={T.textLight} style={{ marginBottom: 16 }} />
-            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>No suppliers found</h3>
-            <p style={{ fontSize: 14, color: T.textMid }}>Try adjusting your filters</p>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>{t('suppliers.noSuppliers')}</h3>
+            <p style={{ fontSize: 14, color: T.textMid }}>{t('suppliers.noSuppliersSub')}</p>
           </div>
         )}
       </div>
@@ -288,11 +295,12 @@ export function SuppliersPage() {
 }
 
 function SupplierCard({ supplier }: { supplier: Supplier }) {
+  const { t, i18n } = useTranslation();
   const [showDetails, setShowDetails] = useState(false);
   const [hovered, setHovered] = useState(false);
 
   const ts = typeStyle[supplier.type] ?? typeStyle.wholesaler;
-  const maxDiscount = Math.max(...supplier.discountTiers.map((t) => t.discountPercent));
+  const maxDiscount = Math.max(...supplier.discountTiers.map((tier) => tier.discountPercent));
 
   return (
     <div
@@ -353,7 +361,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
           }}
         >
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 600, marginBottom: 2, letterSpacing: '0.05em' }}>
-            UP TO
+            {t('suppliers.upTo')}
           </div>
           <div style={{ fontSize: 22, fontWeight: 900, color: T.gold, lineHeight: 1 }}>{maxDiscount}%</div>
           <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginTop: 2, letterSpacing: '0.05em' }}>
@@ -373,9 +381,9 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
         }}
       >
         {[
-          { val: `${supplier.metrics.fulfillmentRate}%`, label: 'Fulfilled', accent: '#15803D' },
-          { val: `${supplier.metrics.avgDeliveryTime}h`, label: 'Avg Delivery', accent: '#3D4FD6' },
-          { val: `${supplier.metrics.qualityScore}`, label: 'Quality', accent: '#7A5800' },
+          { val: `${supplier.metrics.fulfillmentRate}%`, label: t('suppliers.fulfilled'), accent: '#15803D' },
+          { val: `${supplier.metrics.avgDeliveryTime}h`, label: t('suppliers.avgDelivery'), accent: '#3D4FD6' },
+          { val: `${supplier.metrics.qualityScore}`, label: t('suppliers.quality'), accent: '#7A5800' },
         ].map((m) => (
           <div
             key={m.label}
@@ -406,7 +414,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
             marginBottom: 8,
           }}
         >
-          Products Available
+          {t('suppliers.productsAvailable')}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {supplier.products.slice(0, 5).map((p) => (
@@ -457,11 +465,11 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <MapPin size={13} color={T.textLight} />
-          <span>{supplier.deliveryRadius} km delivery radius</span>
+          <span>{t('suppliers.deliveryRadius', { km: supplier.deliveryRadius })}</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
           <ShoppingCart size={13} color={T.textLight} />
-          <span>Min order: ₹{supplier.minOrderValue.toLocaleString()}</span>
+          <span>{t('suppliers.minOrder', { amount: formatCurrency(supplier.minOrderValue, i18n.language).replace('₹', '').trim() })}</span>
         </div>
       </div>
 
@@ -494,7 +502,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
           }}
         >
           {showDetails ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          {showDetails ? 'Hide Details' : 'View Details'}
+          {showDetails ? t('suppliers.hideDetails') : t('suppliers.viewDetails')}
         </button>
 
         <button
@@ -522,7 +530,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
             e.currentTarget.style.background = T.textDark;
           }}
         >
-          Contact Supplier
+          {t('suppliers.contactSupplier')}
         </button>
       </div>
 
@@ -548,7 +556,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                 marginBottom: 6,
               }}
             >
-              Full Address
+              {t('suppliers.fullAddress')}
             </div>
             <div style={{ fontSize: 13, color: T.textMid, lineHeight: 1.6 }}>{supplier.location.address}</div>
           </div>
@@ -564,7 +572,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                 marginBottom: 10,
               }}
             >
-              Bulk Discount Tiers
+              {t('suppliers.discountTiers')}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {supplier.discountTiers.map((tier) => (
@@ -582,7 +590,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                   }}
                 >
                   <span style={{ color: T.textMid }}>
-                    {tier.minQuantity} – {tier.maxQuantity === Infinity ? '∞' : tier.maxQuantity} units
+                    {tier.minQuantity} â€“ {tier.maxQuantity === Infinity ? 'âˆž' : tier.maxQuantity} units
                   </span>
                   <span
                     style={{
@@ -595,7 +603,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                       border: `1px solid ${T.goldBorder}`,
                     }}
                   >
-                    {tier.discountPercent}% off
+                    {tier.discountPercent}% {t('common.off')}
                   </span>
                 </div>
               ))}
@@ -613,7 +621,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                 marginBottom: 10,
               }}
             >
-              Complete Product Catalog
+              {t('suppliers.productCatalog')}
             </div>
             <div
               style={{
@@ -635,7 +643,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                 >
                   <div style={{ fontSize: 13, fontWeight: 700, color: T.textDark, marginBottom: 3 }}>{product.productName}</div>
                   <div style={{ fontSize: 11, color: T.textLight }}>
-                    ₹{product.basePrice}/{product.unit} · MOQ: {product.moq}
+                    {formatCurrency(product.basePrice, i18n.language)}/{product.unit} ? MOQ: {product.moq}
                   </div>
                   {!product.available && (
                     <span
@@ -651,7 +659,7 @@ function SupplierCard({ supplier }: { supplier: Supplier }) {
                         border: '1px solid rgba(239,68,68,0.2)',
                       }}
                     >
-                      Out of stock
+                      {t('suppliers.outOfStock')}
                     </span>
                   )}
                 </div>
@@ -695,3 +703,4 @@ function StyledSelect({
     </Select>
   );
 }
+

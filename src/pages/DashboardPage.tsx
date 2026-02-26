@@ -1,13 +1,20 @@
-import { useState, type ReactNode } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect, useState, type ReactNode } from 'react';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import PageLayout from '@/components/layout/PageLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProductGroups } from '@/hooks/useProductGroups';
 import { useMatching } from '@/hooks/useMatching';
 import { ProductGroupCard } from '@/components/features/ProductGroupCard';
+import { DemoModeBanner } from '@/components/features/DemoModeBanner';
+import { AIPredictionCard } from '@/components/features/AIPredictionCard';
+import { AIPriceIntelligenceWidget } from '@/components/features/AIPriceIntelligenceWidget';
+import { AIOrderOptimizerCard } from '@/components/features/AIOrderOptimizerCard';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrendingDown, Users, Package, Zap, ChevronRight, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '@/lib/formatters';
 
 const T = {
   bg: '#F0EFED',
@@ -27,9 +34,16 @@ const T = {
 export default function DashboardPage() {
   const { user: currentUser, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const [searchParams] = useSearchParams();
   const { joinGroup, leaveGroup, isUserInGroup, getUserGroups, getAvailableGroups } = useProductGroups();
   const { matches, loading: aiLoading, error: aiError } = useMatching(currentUser);
-  const [activeTab, setActiveTab] = useState('all');
+  const initialTab = searchParams.get('tab') === 'my-groups' ? 'my-groups' : 'all';
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    setActiveTab(searchParams.get('tab') === 'my-groups' ? 'my-groups' : 'all');
+  }, [searchParams]);
 
   if (!isAuthenticated || !currentUser) return <Navigate to="/register" replace />;
 
@@ -43,19 +57,19 @@ export default function DashboardPage() {
     const group = [...availableGroups, ...myGroups].find((g) => g.id === groupId);
     const success = joinGroup(groupId, currentUser.id);
     if (success) {
-      toast.success(`Joined ${group?.productName ?? 'Group'}! 🎉`, {
-        description: group ? `You'll save ₹${group.savingsPerOrder.toLocaleString()} per order` : undefined,
+      toast.success(t('toast.joinedGroup', { name: group?.productName ?? 'Group' }), {
+        description: group ? t('toast.joinedGroupDesc', { amount: group.savingsPerOrder.toLocaleString() }) : undefined,
       });
     } else {
-      toast.error('Failed to join group');
+      toast.error(t('toast.failedJoin'));
     }
   };
 
   const handleLeaveGroup = (groupId: string) => {
     if (!currentUser) return;
     const success = leaveGroup(groupId, currentUser.id);
-    if (success) toast.info('Left group');
-    else toast.error('Failed to leave group');
+    if (success) toast.info(t('toast.leftGroup'));
+    else toast.error(t('toast.failedLeave'));
   };
 
   return (
@@ -71,6 +85,9 @@ export default function DashboardPage() {
         }}
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(16px, 3vw, 32px)' }}>
+          <div style={{ marginBottom: 16 }}>
+            <DemoModeBanner />
+          </div>
           <div
             style={{
               display: 'flex',
@@ -93,7 +110,7 @@ export default function DashboardPage() {
                     color: T.textDark,
                   }}
                 >
-                  Welcome back,
+                  {t('dashboard.welcome')}
                 </h1>
                 <span
                   style={{
@@ -109,10 +126,11 @@ export default function DashboardPage() {
                 </span>
               </div>
               <p style={{ fontSize: 14, color: T.textMid, marginTop: 6 }}>
-                Join active groups and start saving on bulk orders
+                {t('dashboard.subtitle')}
               </p>
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <LanguageSwitcher />
               <button
                 onClick={() => navigate('/buyers')}
                 style={{
@@ -132,7 +150,7 @@ export default function DashboardPage() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                Find Retailers <ChevronRight size={14} />
+                {t('nav.directory')} <ChevronRight size={14} />
               </button>
               <button
                 onClick={() => navigate('/suppliers')}
@@ -153,8 +171,41 @@ export default function DashboardPage() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                Verified Suppliers <ChevronRight size={14} />
+                {t('nav.suppliers')} <ChevronRight size={14} />
               </button>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: 24 }}>
+            <button
+              onClick={() => navigate('/savings-calculator')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '10px 20px',
+                borderRadius: 100,
+                fontSize: 14,
+                fontWeight: 700,
+                background: T.textDark,
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: T.font,
+                boxShadow: '0 2px 12px rgba(0,0,0,0.14)',
+              }}
+            >
+              {t('savingsPage.openButton', { defaultValue: 'Open Savings Calculator' })}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+            <div className="lg:col-span-2">
+              <AIPredictionCard />
+            </div>
+            <AIPriceIntelligenceWidget />
+            <div className="lg:col-span-3">
+              <AIOrderOptimizerCard />
             </div>
           </div>
 
@@ -168,23 +219,23 @@ export default function DashboardPage() {
           >
             <StatCard
               icon={<Package size={20} />}
-              label="Your Groups"
+              label={t('dashboard.yourGroups')}
               value={myGroups.length.toString()}
-              sub="Active memberships"
+              sub={t('dashboard.activeMemberships')}
               accent={T.gold}
             />
             <StatCard
               icon={<TrendingDown size={20} />}
-              label="Estimated Savings"
-              value={`₹${totalSavings.toLocaleString()}`}
-              sub="per month"
+              label={t('dashboard.estimatedSavings')}
+              value={formatCurrency(totalSavings, i18n.language)}
+              sub={t('common.perMonth')}
               accent="#38B295"
             />
             <StatCard
               icon={<Users size={20} />}
-              label="Available Groups"
+              label={t('dashboard.availableGroups')}
               value={availableGroups.length.toString()}
-              sub={`for ${currentUser.storeType} stores`}
+              sub={t('dashboard.forStoreType', { type: currentUser.storeType })}
               accent="#6474F0"
             />
           </div>
@@ -209,7 +260,7 @@ export default function DashboardPage() {
               }}
             >
               <h2 style={{ fontSize: 'clamp(17px, 2.5vw, 20px)', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                AI Retailer Matches
+                {t('dashboard.aiMatches')}
               </h2>
               <span
                 style={{
@@ -225,7 +276,7 @@ export default function DashboardPage() {
                   fontWeight: 700,
                 }}
               >
-                <Zap size={10} fill="#FFB800" color="#FFB800" /> Live AI
+                <Zap size={10} fill="#FFB800" color="#FFB800" /> {t('dashboard.liveAI')}
               </span>
             </div>
 
@@ -243,7 +294,7 @@ export default function DashboardPage() {
                     flexShrink: 0,
                   }}
                 />
-                Loading AI model and scoring matches...
+                {t('dashboard.aiLoading')}
               </div>
             )}
 
@@ -260,7 +311,7 @@ export default function DashboardPage() {
                   borderRadius: 10,
                 }}
               >
-                <AlertCircle size={14} /> AI matching failed: {aiError}
+                <AlertCircle size={14} /> {t('dashboard.aiFailed', { error: aiError })}
               </div>
             )}
 
@@ -305,7 +356,7 @@ export default function DashboardPage() {
             )}
 
             {!aiLoading && !aiError && matches.length === 0 && (
-              <p style={{ fontSize: 14, color: T.textLight }}>No AI matches found within 10 km.</p>
+              <p style={{ fontSize: 14, color: T.textLight }}>{t('dashboard.noMatches')}</p>
             )}
           </div>
 
@@ -321,7 +372,7 @@ export default function DashboardPage() {
                 }}
               >
                 <h2 style={{ fontSize: 'clamp(17px, 2.5vw, 20px)', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                  Filling Fast
+                  {t('dashboard.fillingFast')}
                 </h2>
                 <span
                   style={{
@@ -333,7 +384,7 @@ export default function DashboardPage() {
                     fontWeight: 700,
                   }}
                 >
-                  ⚡ Limited Spots
+                  {t('dashboard.limitedSpots')}
                 </span>
               </div>
               <div
@@ -383,7 +434,7 @@ export default function DashboardPage() {
                   transition: 'all 0.2s ease',
                 }}
               >
-                All Groups ({availableGroups.length})
+                {t('dashboard.allGroups', { count: availableGroups.length })}
               </TabsTrigger>
               <TabsTrigger
                 value="my-groups"
@@ -400,17 +451,17 @@ export default function DashboardPage() {
                   transition: 'all 0.2s ease',
                 }}
               >
-                My Groups ({myGroups.length})
+                {t('dashboard.myGroups', { count: myGroups.length })}
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="all">
               <div style={{ marginBottom: 20 }}>
                 <h2 style={{ fontSize: 'clamp(17px, 2.5vw, 22px)', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                  Active Groups - Join Now
+                  {t('dashboard.activeGroupsTitle')}
                 </h2>
                 <p style={{ fontSize: 14, color: T.textMid, marginTop: 4 }}>
-                  Groups available for {currentUser.storeType} stores
+                  {t('dashboard.activeGroupsSub', { type: currentUser.storeType })}
                 </p>
               </div>
 
@@ -432,17 +483,21 @@ export default function DashboardPage() {
                   ))}
                 </div>
               ) : (
-                <EmptyState emoji="🔍" title="No groups yet" sub="No groups available for your store type yet. Check back soon." />
+                <EmptyState
+                  emoji="🔍"
+                  title={t('dashboard.noGroupsAvailable')}
+                  sub={t('dashboard.noGroupsAvailable')}
+                />
               )}
             </TabsContent>
 
             <TabsContent value="my-groups">
               <div style={{ marginBottom: 20 }}>
                 <h2 style={{ fontSize: 'clamp(17px, 2.5vw, 22px)', fontWeight: 800, letterSpacing: '-0.02em' }}>
-                  Your Active Groups
+                  {t('dashboard.myGroupsTitle')}
                 </h2>
                 <p style={{ fontSize: 14, color: T.textMid, marginTop: 4 }}>
-                  Manage your memberships
+                  {t('dashboard.myGroupsSub')}
                 </p>
               </div>
 
@@ -467,9 +522,9 @@ export default function DashboardPage() {
               ) : (
                 <EmptyState
                   emoji="📦"
-                  title="No Groups Yet"
-                  sub="Join a group to start saving on bulk orders!"
-                  action={{ label: 'Browse Available Groups', onClick: () => setActiveTab('all') }}
+                  title={t('dashboard.noGroupsJoined')}
+                  sub={t('dashboard.noGroupsJoinedSub')}
+                  action={{ label: t('dashboard.browseGroups'), onClick: () => setActiveTab('all') }}
                 />
               )}
             </TabsContent>

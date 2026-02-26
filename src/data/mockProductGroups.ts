@@ -22,9 +22,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Premium Basmati Rice - Bulk orders every Monday',
     minQuantity: 50,
     unit: 'kg',
+    members: [],
     memberIds: [], // Will populate later
     isAlmostFull: true,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -48,9 +52,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Generic Paracetamol tablets - Bi-weekly group orders',
     minQuantity: 500,
     unit: 'pieces',
+    members: [],
     memberIds: [],
     isAlmostFull: true,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -74,9 +82,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Sunflower cooking oil - Perfect for restaurants',
     minQuantity: 20,
     unit: 'liters',
+    members: [],
     memberIds: [],
     isAlmostFull: false,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -100,9 +112,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Cough syrup bulk orders - Monthly schedule',
     minQuantity: 40,
     unit: 'bottles',
+    members: [],
     memberIds: [],
     isAlmostFull: false,
     isNewGroup: true,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -126,9 +142,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Atta (Wheat Flour) - Weekly bulk delivery',
     minQuantity: 100,
     unit: 'kg',
+    members: [],
     memberIds: [],
     isAlmostFull: true,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -152,9 +172,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'Restaurant-grade spice mix - Bi-weekly orders',
     minQuantity: 10,
     unit: 'kg',
+    members: [],
     memberIds: [],
     isAlmostFull: false,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -178,9 +202,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'White sugar - Weekly group orders',
     minQuantity: 50,
     unit: 'kg',
+    members: [],
     memberIds: [],
     isAlmostFull: true,
     isNewGroup: false,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 
   {
@@ -204,9 +232,13 @@ export const mockProductGroups: ProductGroup[] = [
     description: 'First aid supplies - Monthly bulk orders',
     minQuantity: 100,
     unit: 'pieces',
+    members: [],
     memberIds: [],
     isAlmostFull: false,
     isNewGroup: true,
+    requiresAdvancePayment: true,
+    advancePaymentPercent: 30,
+    advancePaymentDeadline: '2026-02-26T23:59:59',
   },
 ];
 

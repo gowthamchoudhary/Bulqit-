@@ -1,102 +1,305 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+﻿import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Package, Menu, X, LayoutDashboard, Users, Mail, BarChart3, LogOut } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Package, Menu, X, LayoutDashboard, Users, BarChart3, LogOut, Sparkles } from 'lucide-react';
+import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 
 const navLinks = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/group-form', label: 'Create Group', icon: Users },
-  { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { to: '/dashboard', key: 'nav.dashboard', icon: LayoutDashboard },
+  { to: '/group-form', key: 'nav.createGroup', icon: Users },
+  { to: '/analytics', key: 'nav.analytics', icon: BarChart3 },
 ];
+
+const T = {
+  bg: '#F0EFED',
+  bgWhite: '#ffffff',
+  textDark: '#111111',
+  textMid: '#555555',
+  border: 'rgba(0,0,0,0.08)',
+  borderDash: 'rgba(0,0,0,0.12)',
+  gold: '#FFB800',
+  goldSoft: 'rgba(255,184,0,0.12)',
+  goldBorder: 'rgba(255,184,0,0.35)',
+  font: "'DM Sans', sans-serif",
+};
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-card/80 backdrop-blur-md">
+    <nav
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 60,
+        borderBottom: `1px solid ${T.border}`,
+        background: 'rgba(240,239,237,0.88)',
+        backdropFilter: 'blur(10px)',
+        fontFamily: T.font,
+      }}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <button onClick={() => navigate('/')} className="flex items-center gap-2 font-bold text-lg">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-primary">
-            <Package className="h-5 w-5 text-primary-foreground" />
+        <button
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2"
+          style={{ fontWeight: 800, fontSize: 18, letterSpacing: '-0.02em', color: T.textDark }}
+        >
+          <div
+            style={{
+              width: 36,
+              height: 36,
+              borderRadius: 10,
+              background: T.textDark,
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            }}
+          >
+            <Package className="h-5 w-5" />
           </div>
-          <span className="gradient-text font-extrabold">BulkBridge AI</span>
+          <span>{t('app.name')}</span>
         </button>
 
-        {/* Desktop */}
         <div className="hidden md:flex items-center gap-1">
-          {isAuthenticated && navLinks.map((l) => (
-            <button
-              key={l.to}
-              onClick={() => navigate(l.to)}
-              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                location.pathname === l.to
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-              }`}
-            >
-              <l.icon className="h-4 w-4" />
-              {l.label}
-            </button>
-          ))}
+          {isAuthenticated && navLinks.map((l) => {
+            const isActive = location.pathname === l.to;
+            return (
+              <button
+                key={l.to}
+                onClick={() => navigate(l.to)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 12px',
+                  borderRadius: 999,
+                  border: `1px solid ${isActive ? T.goldBorder : 'transparent'}`,
+                  background: isActive ? T.goldSoft : 'transparent',
+                  color: isActive ? '#7A5800' : T.textMid,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: T.font,
+                }}
+              >
+                <l.icon className="h-4 w-4" />
+                {t(l.key)}
+              </button>
+            );
+          })}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={() => navigate('/pricing')}
+            style={{
+              padding: '8px 14px',
+              borderRadius: 999,
+              border: `1px solid ${T.border}`,
+              background: T.bgWhite,
+              color: T.textDark,
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: 'pointer',
+              fontFamily: T.font,
+            }}
+          >
+            Pricing
+          </button>
+          {isAuthenticated && (
+            <button
+              onClick={() => navigate('/negotiate')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 7,
+                padding: '8px 14px',
+                borderRadius: 999,
+                border: `1px solid ${T.goldBorder}`,
+                background: T.goldSoft,
+                color: '#7A5800',
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                fontFamily: T.font,
+              }}
+            >
+              <Sparkles className="w-4 h-4" />
+              AI Negotiation
+            </button>
+          )}
+          <LanguageSwitcher />
           {isAuthenticated ? (
             <>
-              <span className="text-sm text-muted-foreground">{user?.storeName}</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: T.textMid, maxWidth: 140, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {user?.storeName}
+              </span>
               <button
                 onClick={() => { logout(); navigate('/'); }}
-                className="flex items-center gap-1 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '8px 12px',
+                  borderRadius: 999,
+                  border: `1px solid ${T.border}`,
+                  background: T.bgWhite,
+                  color: T.textMid,
+                  fontSize: 13,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: T.font,
+                }}
               >
                 <LogOut className="h-4 w-4" />
-                Logout
+                {t('nav.logout')}
               </button>
             </>
           ) : (
             <button
               onClick={() => navigate('/register')}
-              className="rounded-lg gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground btn-scale"
+              style={{
+                borderRadius: 999,
+                border: 'none',
+                background: T.textDark,
+                color: '#fff',
+                padding: '9px 16px',
+                fontSize: 13,
+                fontWeight: 800,
+                cursor: 'pointer',
+                fontFamily: T.font,
+                boxShadow: '0 2px 10px rgba(0,0,0,0.15)',
+              }}
             >
-              Get Started
+              {t('nav.getStarted')}
             </button>
           )}
         </div>
 
-        {/* Mobile toggle */}
-        <button className="md:hidden p-2" onClick={() => setOpen(!open)}>
+        <button className="md:hidden p-2" onClick={() => setOpen(!open)} style={{ color: T.textDark }}>
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-border bg-card px-4 pb-4 animate-fade-in">
+        <div
+          className="md:hidden px-4 pb-4"
+          style={{ borderTop: `1px solid ${T.border}`, background: T.bg }}
+        >
+          <div className="py-3">
+            <LanguageSwitcher />
+          </div>
           {isAuthenticated && navLinks.map((l) => (
             <button
               key={l.to}
               onClick={() => { navigate(l.to); setOpen(false); }}
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-3 text-sm font-medium text-muted-foreground hover:bg-muted"
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: 8,
+                borderRadius: 12,
+                padding: '10px 12px',
+                marginBottom: 6,
+                border: `1px solid ${T.border}`,
+                background: T.bgWhite,
+                color: T.textMid,
+                fontSize: 13,
+                fontWeight: 700,
+                fontFamily: T.font,
+              }}
             >
               <l.icon className="h-4 w-4" />
-              {l.label}
+              {t(l.key)}
             </button>
           ))}
+          {isAuthenticated && (
+            <button
+              onClick={() => { navigate('/negotiate'); setOpen(false); }}
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: 8,
+                borderRadius: 12,
+                padding: '10px 12px',
+                marginBottom: 6,
+                border: `1px solid ${T.goldBorder}`,
+                background: T.goldSoft,
+                color: '#7A5800',
+                fontSize: 13,
+                fontWeight: 700,
+                fontFamily: T.font,
+              }}
+            >
+              <Sparkles className="w-4 h-4" />
+              AI Negotiation
+            </button>
+          )}
+          <button
+            onClick={() => { navigate('/pricing'); setOpen(false); }}
+            style={{
+              display: 'flex',
+              width: '100%',
+              alignItems: 'center',
+              gap: 8,
+              borderRadius: 12,
+              padding: '10px 12px',
+              marginBottom: 6,
+              border: `1px solid ${T.border}`,
+              background: T.bgWhite,
+              color: T.textMid,
+              fontSize: 13,
+              fontWeight: 700,
+              fontFamily: T.font,
+            }}
+          >
+            Pricing
+          </button>
           {isAuthenticated ? (
             <button
               onClick={() => { logout(); navigate('/'); setOpen(false); }}
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-3 text-sm text-destructive"
+              style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                gap: 8,
+                borderRadius: 12,
+                padding: '10px 12px',
+                border: `1px solid ${T.border}`,
+                background: T.bgWhite,
+                color: T.textMid,
+                fontSize: 13,
+                fontWeight: 700,
+                fontFamily: T.font,
+              }}
             >
-              <LogOut className="h-4 w-4" /> Logout
+              <LogOut className="h-4 w-4" /> {t('nav.logout')}
             </button>
           ) : (
             <button
               onClick={() => { navigate('/register'); setOpen(false); }}
-              className="mt-2 w-full rounded-lg gradient-primary px-4 py-3 text-sm font-semibold text-primary-foreground"
+              style={{
+                marginTop: 6,
+                width: '100%',
+                borderRadius: 999,
+                border: 'none',
+                background: T.textDark,
+                color: '#fff',
+                padding: '11px 16px',
+                fontSize: 13,
+                fontWeight: 800,
+                fontFamily: T.font,
+              }}
             >
-              Get Started
+              {t('nav.getStarted')}
             </button>
           )}
         </div>

@@ -1,4 +1,5 @@
 export type StoreType = 'Medical' | 'Kirana' | 'Restaurant' | 'Stationery' | 'Electronics';
+export type LanguageCode = 'en' | 'hi' | 'te' | 'ta' | 'ml' | 'kn';
 
 export interface Retailer {
   id: string;
@@ -33,6 +34,7 @@ export interface Retailer {
   storeFrontPhoto?: string; // base64 or URL
 
   joinedDate: string;
+  languagePreference?: LanguageCode;
 }
 
 export interface MatchResult {

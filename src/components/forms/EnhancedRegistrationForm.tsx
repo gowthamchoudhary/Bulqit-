@@ -6,6 +6,7 @@ import { storeTypes, productSuggestions } from '@/data/mockRetailers';
 import { Retailer, StoreType } from '@/types/retailer';
 import { toast } from 'sonner';
 import { CheckCircle, AlertCircle, Info, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const T = {
   bg: '#F0EFED',
@@ -47,6 +48,7 @@ type RegistrationFormData = {
 
 export function EnhancedRegistrationForm() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -154,9 +156,11 @@ export function EnhancedRegistrationForm() {
       numberOfEmployees: Number(formData.numberOfEmployees) || 1,
       storeFrontPhoto: formData.storeFrontPhoto || undefined,
       joinedDate: new Date().toISOString(),
+      languagePreference: (localStorage.getItem('bulqit_language') ?? 'en'),
     };
 
-    localStorage.setItem('currentRetailer', JSON.stringify(newRetailer));
+    // Persist user in auth/storage so dashboard route guard passes.
+    login(newRetailer);
     setIsSubmitting(false);
     toast.success('Registration submitted!', {
       description: 'Your account is under verification. You can start browsing groups.',

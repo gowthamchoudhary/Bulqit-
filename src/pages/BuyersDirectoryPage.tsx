@@ -4,6 +4,9 @@ import { Retailer, StoreType } from '@/types/retailer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MapPin, Search, Phone, Mail, Package, TrendingUp, MessageCircle, Users, Building, Calendar, X, Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '@/lib/formatters';
+import { DemoModeBanner } from '@/components/features/DemoModeBanner';
 
 const T = {
   bg: '#F0EFED',
@@ -30,6 +33,7 @@ const storeTypeStyle: Record<StoreType, { bg: string; color: string; border: str
 type DirectorySortBy = 'budget' | 'distance' | 'recent';
 
 export function BuyersDirectoryPage() {
+  const { t, i18n } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStoreType, setSelectedStoreType] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState('all');
@@ -110,7 +114,7 @@ export function BuyersDirectoryPage() {
                 letterSpacing: '0.04em',
               }}
             >
-              {mockRetailers.length} Active Retailers
+              {t('directory.activeRetailers', { count: mockRetailers.length })}
             </span>
             <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>All verified members</span>
           </div>
@@ -125,7 +129,7 @@ export function BuyersDirectoryPage() {
               lineHeight: 1.08,
             }}
           >
-            Buyers Directory
+            {t('directory.heroTitle')}
           </h1>
           <p
             style={{
@@ -136,7 +140,7 @@ export function BuyersDirectoryPage() {
               marginBottom: 32,
             }}
           >
-            Find nearby retailers to form buying groups with. Connect directly and start saving together.
+            {t('directory.heroSub')}
           </p>
 
           <div
@@ -148,9 +152,9 @@ export function BuyersDirectoryPage() {
             }}
           >
             {[
-              { val: mockRetailers.length, label: 'Verified Retailers' },
-              { val: allProducts.length, label: 'Products Available' },
-              { val: 5, label: 'Store Categories' },
+              { val: mockRetailers.length, label: t('directory.verifiedRetailers') },
+              { val: allProducts.length, label: t('directory.productsAvailable') },
+              { val: 5, label: t('directory.storeCategories') },
             ].map((s) => (
               <div
                 key={s.label}
@@ -171,6 +175,9 @@ export function BuyersDirectoryPage() {
       </div>
 
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: 'clamp(16px, 3vw, 32px)' }}>
+        <div style={{ marginBottom: 16 }}>
+          <DemoModeBanner />
+        </div>
         <div
           style={{
             background: T.bgWhite,
@@ -195,7 +202,7 @@ export function BuyersDirectoryPage() {
                 style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
               />
               <input
-                placeholder="Search by store name or location..."
+                placeholder={t('directory.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -222,7 +229,7 @@ export function BuyersDirectoryPage() {
 
             <BulqitSelect value={selectedStoreType} onChange={setSelectedStoreType}>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="all">{t('directory.allTypes')}</SelectItem>
                 {(['Medical', 'Kirana', 'Restaurant', 'Stationery', 'Electronics'] as StoreType[]).map((t) => (
                   <SelectItem key={t} value={t}>
                     {t}
@@ -233,7 +240,7 @@ export function BuyersDirectoryPage() {
 
             <BulqitSelect value={selectedProduct} onChange={setSelectedProduct}>
               <SelectContent>
-                <SelectItem value="all">All Products</SelectItem>
+                <SelectItem value="all">{t('directory.allProducts')}</SelectItem>
                 {allProducts.map((p) => (
                   <SelectItem key={p} value={p}>
                     {p}
@@ -256,14 +263,14 @@ export function BuyersDirectoryPage() {
             }}
           >
             <span style={{ fontSize: 13, color: T.textMid }}>
-              Found <strong style={{ color: T.textDark }}>{sortedRetailers.length}</strong> retailers
+              {t('directory.foundRetailers', { count: sortedRetailers.length })}
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 13, color: T.textLight }}>Sort by:</span>
+              <span style={{ fontSize: 13, color: T.textLight }}>{t('common.sortBy')}</span>
               <BulqitSelect value={sortBy} onChange={(v) => setSortBy(v as DirectorySortBy)}>
                 <SelectContent>
-                  <SelectItem value="budget">Highest Budget</SelectItem>
-                  <SelectItem value="recent">Recently Joined</SelectItem>
+                  <SelectItem value="budget">{t('directory.highestBudget')}</SelectItem>
+                  <SelectItem value="recent">{t('directory.recentlyJoined')}</SelectItem>
                 </SelectContent>
               </BulqitSelect>
             </div>
@@ -284,10 +291,9 @@ export function BuyersDirectoryPage() {
         >
           <MessageCircle size={16} color="#7A5800" style={{ flexShrink: 0, marginTop: 1 }} />
           <div style={{ fontSize: 13 }}>
-            <div style={{ fontWeight: 700, color: T.textDark, marginBottom: 3 }}>How to Form a Group</div>
+            <div style={{ fontWeight: 700, color: T.textDark, marginBottom: 3 }}>{t('directory.howToForm')}</div>
             <div style={{ color: T.textMid, lineHeight: 1.6 }}>
-              Found someone selling similar products? Click <strong>Contact</strong> to send a group invitation. Once both agree,
-              start ordering together and unlock bulk discounts.
+              {t('directory.howToFormText')}
             </div>
           </div>
         </div>
@@ -315,8 +321,8 @@ export function BuyersDirectoryPage() {
             }}
           >
             <Users size={48} color={T.textLight} style={{ marginBottom: 16 }} />
-            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>No retailers found</h3>
-            <p style={{ fontSize: 14, color: T.textMid }}>Try adjusting your filters</p>
+            <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 8 }}>{t('directory.noRetailers')}</h3>
+            <p style={{ fontSize: 14, color: T.textMid }}>{t('directory.noRetailersSub')}</p>
           </div>
         )}
       </div>
@@ -325,6 +331,7 @@ export function BuyersDirectoryPage() {
 }
 
 function RetailerCard({ retailer }: { retailer: Retailer }) {
+  const { t, i18n } = useTranslation();
   const [showContact, setShowContact] = useState(false);
   const [hovered, setHovered] = useState(false);
 
@@ -333,7 +340,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
   const isRecent = Date.now() - joinedDate.getTime() < 7 * 24 * 60 * 60 * 1000;
 
   const handleContact = () => {
-    toast.success('Contact request sent!', {
+    toast.success(t('directory.sendInvite'), {
       description: `${retailer.storeName} will receive your group invitation.`,
     });
     setShowContact(false);
@@ -431,7 +438,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
           }}
         >
           <Package size={12} color={T.textLight} />
-          Products ({retailer.products.length})
+          {t('directory.products', { count: retailer.products.length })}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {retailer.products.slice(0, 4).map((product, idx) => (
@@ -499,7 +506,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
               marginBottom: 5,
             }}
           >
-            <TrendingUp size={11} /> Monthly Budget
+            <TrendingUp size={11} /> {t('directory.monthlyBudget')}
           </div>
           <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.02em', color: T.textDark }}>
             ₹{(retailer.monthlyBudget / 1000).toFixed(0)}K
@@ -526,10 +533,10 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
               marginBottom: 5,
             }}
           >
-            <Calendar size={11} /> Member Since
+            <Calendar size={11} /> {t('directory.memberSince')}
           </div>
           <div style={{ fontSize: 15, fontWeight: 800, color: T.textDark }}>
-            {joinedDate.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
+            {joinedDate.toLocaleDateString(i18n.language === 'en' ? 'en-IN' : `${i18n.language}-IN`, { month: 'short', year: 'numeric' })}
           </div>
         </div>
       </div>
@@ -563,7 +570,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
               e.currentTarget.style.borderColor = T.borderDash;
             }}
           >
-            <MessageCircle size={14} /> Contact
+            <MessageCircle size={14} /> {t('directory.contact')}
           </button>
           <button
             onClick={() => window.open(`tel:${retailer.phone}`)}
@@ -591,7 +598,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
               e.currentTarget.style.background = T.textDark;
             }}
           >
-            <Phone size={14} /> Call
+            <Phone size={14} /> {t('directory.call')}
           </button>
         </div>
       ) : (
@@ -612,7 +619,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
               marginBottom: 12,
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 700, color: T.textDark }}>Contact Information</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: T.textDark }}>{t('directory.contactInfo')}</span>
             <button
               onClick={() => setShowContact(false)}
               style={{
@@ -681,7 +688,7 @@ function RetailerCard({ retailer }: { retailer: Retailer }) {
                 boxShadow: '0 2px 12px rgba(255,184,0,0.35)',
               }}
             >
-              <Send size={13} /> Send Invite
+              <Send size={13} /> {t('directory.sendInvite')}
             </button>
           </div>
         </div>

@@ -3,6 +3,7 @@ import PageLayout from '@/components/layout/PageLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMatching } from '@/hooks/useMatching';
 import { formatCurrency } from '@/hooks/useSavingsCalc';
+import { useTranslation } from 'react-i18next';
 import {
   BarChart,
   Bar,
@@ -26,6 +27,7 @@ const COLORS = [
 
 export default function AnalyticsPage() {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   const { matches, loading, error } = useMatching(user);
 
   if (!isAuthenticated) return <Navigate to="/register" replace />;
@@ -51,18 +53,18 @@ export default function AnalyticsPage() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <h1 className="mb-2 text-2xl font-bold text-foreground">Savings Analytics</h1>
         <p className="mb-8 text-muted-foreground">
-          Track your potential savings and partnership opportunities.
+          {t('dashboard.estimatedSavings')} and partnership opportunities.
         </p>
 
         {loading && (
           <div className="mb-6 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-            Running AI matching...
+            {t('dashboard.loadingAi')}
           </div>
         )}
 
         {error && (
           <div className="mb-6 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-700">
-            AI matching failed: {error}
+            {t('dashboard.aiFailed')}: {error}
           </div>
         )}
 

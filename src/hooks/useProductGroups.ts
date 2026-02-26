@@ -5,6 +5,29 @@ import { mockProductGroups } from '@/data/mockProductGroups';
 const STORAGE_KEY = 'bulkbridge_product_groups';
 const USER_GROUPS_KEY = 'bulkbridge_user_groups';
 
+function normalizeGroup(group: Partial<ProductGroup>): ProductGroup {
+  const fallback = mockProductGroups.find((g) => g.id === group.id) ?? mockProductGroups[0];
+
+  return {
+    ...fallback,
+    ...group,
+    members: Array.isArray(group.members) ? group.members : fallback.members ?? [],
+    memberIds: Array.isArray(group.memberIds) ? group.memberIds : fallback.memberIds ?? [],
+    requiresAdvancePayment:
+      typeof group.requiresAdvancePayment === 'boolean'
+        ? group.requiresAdvancePayment
+        : fallback.requiresAdvancePayment,
+    advancePaymentPercent:
+      typeof group.advancePaymentPercent === 'number'
+        ? group.advancePaymentPercent
+        : fallback.advancePaymentPercent,
+    advancePaymentDeadline:
+      typeof group.advancePaymentDeadline === 'string'
+        ? group.advancePaymentDeadline
+        : fallback.advancePaymentDeadline,
+  };
+}
+
 export function useProductGroups() {
   const [groups, setGroups] = useState<ProductGroup[]>([]);
   const [userGroupIds, setUserGroupIds] = useState<string[]>([]);
@@ -14,7 +37,12 @@ export function useProductGroups() {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        setGroups(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        const normalized = Array.isArray(parsed)
+          ? parsed.map((g) => normalizeGroup(g))
+          : mockProductGroups;
+        setGroups(normalized);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
       } catch (e) {
         console.error('Failed to load groups:', e);
         setGroups(mockProductGroups);
@@ -57,6 +85,8 @@ export function useProductGroups() {
   const joinGroup = (groupId: string, userId: string) => {
     const group = groups.find(g => g.id === groupId);
     if (!group) return false;
+    if (group.spotsLeft <= 0) return false;
+    if (group.memberIds.includes(userId)) return false;
 
     // Update group
     updateGroup(groupId, {
@@ -67,7 +97,7 @@ export function useProductGroups() {
     });
 
     // Update user's groups
-    setUserGroupIds(prev => [...prev, groupId]);
+    setUserGroupIds(prev => (prev.includes(groupId) ? prev : [...prev, groupId]));
 
     return true;
   };
