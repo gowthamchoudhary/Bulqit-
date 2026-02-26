@@ -458,9 +458,8 @@ export function SupplierRegistrationPage() {
     };
     localStorage.setItem("currentSupplier", JSON.stringify(supplier));
     setSubmitting(false);
-    setSuccess(true);
     toast.success(s("successTitle"), { description: s("successDesc") });
-    setTimeout(() => navigate("/supplier/dashboard"), 3500);
+    navigate("/supplier/dashboard");
   };
 
   /* ── SUCCESS SCREEN ── */
