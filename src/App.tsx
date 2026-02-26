@@ -1,4 +1,4 @@
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -20,6 +20,8 @@ import { AboutPage } from "./pages/AboutPage";
 import { PricingPage } from "./pages/PricingPage";
 import { AIChatWidget } from "./components/features/AIChatWidget";
 import { SavingsCalculatorPage } from "./pages/SavingsCalculatorPage";
+import { SupplierRegistrationPage } from "./pages/SupplierRegistrationPage";
+import { SupplierDashboard } from "./pages/SupplierDashboard";
 
 const queryClient = new QueryClient();
 
@@ -39,11 +41,16 @@ const App = () => (
             <Route path="/email-result" element={<EmailResultPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/suppliers" element={<SuppliersPage />} />
+            <Route path="/supplier/register" element={<SupplierRegistrationPage />} />
+            <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
             <Route path="/buyers" element={<BuyersDirectoryPage />} />
             <Route path="/negotiate" element={<NegotiationCenterPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/savings-calculator" element={<SavingsCalculatorPage />} />
+            <Route
+              path="/savings-calculator"
+              element={<SavingsCalculatorPage />}
+            />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -55,5 +62,3 @@ const App = () => (
 );
 
 export default App;
-
-

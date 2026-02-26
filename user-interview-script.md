@@ -1,4 +1,4 @@
-# BulkBridge User Validation Prep
+# Bulqit User Validation Prep
 
 ## A) User Interview Script
 
@@ -144,7 +144,7 @@ Total target: 8-10 interviews
 "13 million small retailers in India pay 20% more than they should because they buy individually."
 
 [0:15 - 0:30] Solution
-"BulkBridge AI changes that. We use AI to form automatic buying groups."
+"Bulqit changes that. We use AI to form automatic buying groups."
 
 [0:30 - 1:15] Demo
 1. See active groups.
@@ -161,7 +161,7 @@ Include real photos and real quote:
 - Rajesh Medical Store
 
 [1:45 - 2:00] Impact
-"We're not just saving money. We're saving India's retail backbone. One group at a time. BulkBridge AI. Join us."
+"We're not just saving money. We're saving India's retail backbone. One group at a time. Bulqit. Join us."
 
 Record after interviews so you can use real quotes.
 
@@ -170,7 +170,7 @@ Record after interviews so you can use real quotes.
 ## 4) Pitch Deck Outline (Create Tomorrow)
 
 10 slides (Canva)
-1. Title: BulkBridge AI - Group Buying for Small Retailers
+1. Title: Bulqit - Group Buying for Small Retailers
 2. Problem: 13M retailers pay 20% more; low bargaining power
 3. Current solutions and why they fail
 4. Our solution: pre-formed groups, one-click join, automatic orders

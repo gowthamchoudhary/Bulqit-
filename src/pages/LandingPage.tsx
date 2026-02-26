@@ -1,10 +1,20 @@
-﻿import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Mail, Users, IndianRupee, Star, Quote, CheckCircle } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { HowItWorksPage } from './HowItWorksPage';
-import { mockTestimonials } from '@/data/mockTestimonials';
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  ArrowRight,
+  Mail,
+  Users,
+  IndianRupee,
+  Star,
+  Quote,
+  CheckCircle,
+  Sparkles,
+  MessageSquare,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { HowItWorksPage } from "./HowItWorksPage";
+import { mockTestimonials } from "@/data/mockTestimonials";
 
 type RollingWord = {
   text: string;
@@ -16,39 +26,39 @@ type RollingWord = {
 
 const words: RollingWord[] = [
   {
-    text: 'Negotiator',
-    color: '#B8480A',
-    bg: 'rgba(236,131,60,0.13)',
-    border: 'rgba(236,131,60,0.38)',
-    glow: 'rgba(236,131,60,0.30)',
+    text: "Negotiator",
+    color: "#B8480A",
+    bg: "rgba(236,131,60,0.13)",
+    border: "rgba(236,131,60,0.38)",
+    glow: "rgba(236,131,60,0.30)",
   },
   {
-    text: 'Connector',
-    color: '#0F6B54',
-    bg: 'rgba(56,178,153,0.13)',
-    border: 'rgba(56,178,153,0.38)',
-    glow: 'rgba(56,178,153,0.28)',
+    text: "Connector",
+    color: "#0F6B54",
+    bg: "rgba(56,178,153,0.13)",
+    border: "rgba(56,178,153,0.38)",
+    glow: "rgba(56,178,153,0.28)",
   },
   {
-    text: 'Powerhouse',
-    color: '#2D3FCC',
-    bg: 'rgba(100,116,240,0.13)',
-    border: 'rgba(100,116,240,0.38)',
-    glow: 'rgba(100,116,240,0.28)',
+    text: "Powerhouse",
+    color: "#2D3FCC",
+    bg: "rgba(100,116,240,0.13)",
+    border: "rgba(100,116,240,0.38)",
+    glow: "rgba(100,116,240,0.28)",
   },
   {
-    text: 'Cost Cutter',
-    color: '#9B1845',
-    bg: 'rgba(220,80,120,0.13)',
-    border: 'rgba(220,80,120,0.38)',
-    glow: 'rgba(220,80,120,0.26)',
+    text: "Cost Cutter",
+    color: "#9B1845",
+    bg: "rgba(220,80,120,0.13)",
+    border: "rgba(220,80,120,0.38)",
+    glow: "rgba(220,80,120,0.26)",
   },
   {
-    text: 'Organiser',
-    color: '#7A5A00',
-    bg: 'rgba(180,140,40,0.13)',
-    border: 'rgba(180,140,40,0.38)',
-    glow: 'rgba(180,140,40,0.26)',
+    text: "Organiser",
+    color: "#7A5A00",
+    bg: "rgba(180,140,40,0.13)",
+    border: "rgba(180,140,40,0.38)",
+    glow: "rgba(180,140,40,0.26)",
   },
 ];
 
@@ -58,24 +68,37 @@ export default function LandingPage() {
   const [isExiting, setIsExiting] = useState(false);
   const [isSiteReady, setIsSiteReady] = useState(false);
   const scrollToHowItWorks = () => {
-    const section = document.getElementById('how-it-works-section');
+    const section = document.getElementById("how-it-works-section");
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   useEffect(() => {
-    const loader = document.getElementById('loader');
-    const site = document.getElementById('site');
-    const glowBg = document.getElementById('loader-glow-bg');
-    const shockRing = document.getElementById('shock-ring');
-    const logoImg = document.getElementById('logo-reveal') as HTMLImageElement | null;
-    const barEl = document.getElementById('loader-bar') as HTMLDivElement | null;
-    const cards = ['hc1', 'hc2', 'hc3', 'hc4', 'hc5']
+    const loader = document.getElementById("loader");
+    const site = document.getElementById("site");
+    const glowBg = document.getElementById("loader-glow-bg");
+    const shockRing = document.getElementById("shock-ring");
+    const logoImg = document.getElementById(
+      "logo-reveal",
+    ) as HTMLImageElement | null;
+    const barEl = document.getElementById(
+      "loader-bar",
+    ) as HTMLDivElement | null;
+    const cards = ["hc1", "hc2", "hc3", "hc4", "hc5"]
       .map((id) => document.getElementById(id))
       .filter(Boolean) as HTMLDivElement[];
 
-    if (!loader || !site || !glowBg || !shockRing || !logoImg || !barEl || cards.length !== 5) return;
+    if (
+      !loader ||
+      !site ||
+      !glowBg ||
+      !shockRing ||
+      !logoImg ||
+      !barEl ||
+      cards.length !== 5
+    )
+      return;
 
     const timers: ReturnType<typeof setTimeout>[] = [];
     const rafs: number[] = [];
@@ -90,17 +113,30 @@ export default function LandingPage() {
 
     function playJoinSound() {
       try {
-        const AudioCtx = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        const AudioCtx =
+          window.AudioContext ||
+          (
+            window as typeof window & {
+              webkitAudioContext?: typeof AudioContext;
+            }
+          ).webkitAudioContext;
         if (!AudioCtx) return;
         const ctx = new AudioCtx();
-        [[880, 0.28, 1.4], [1760, 0.12, 0.9], [2640, 0.06, 0.6]].forEach(([freq, vol, dur]) => {
+        [
+          [880, 0.28, 1.4],
+          [1760, 0.12, 0.9],
+          [2640, 0.06, 0.6],
+        ].forEach(([freq, vol, dur]) => {
           const osc = ctx.createOscillator();
           const g = ctx.createGain();
           osc.connect(g);
           g.connect(ctx.destination);
-          osc.type = 'sine';
+          osc.type = "sine";
           osc.frequency.setValueAtTime(freq, ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + dur * 0.4);
+          osc.frequency.exponentialRampToValueAtTime(
+            freq * 0.5,
+            ctx.currentTime + dur * 0.4,
+          );
           g.gain.setValueAtTime(0, ctx.currentTime);
           g.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.012);
           g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
@@ -128,7 +164,10 @@ export default function LandingPage() {
 
     function easeOutElastic(t: number) {
       if (t === 0 || t === 1) return t;
-      return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) + 1;
+      return (
+        Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * ((2 * Math.PI) / 3)) +
+        1
+      );
     }
 
     function tween(dur: number, fn: (t: number) => void, done?: () => void) {
@@ -161,8 +200,8 @@ export default function LandingPage() {
 
     function spawnSparks() {
       for (let i = 0; i < 20; i += 1) {
-        const sp = document.createElement('div');
-        sp.className = 'spark';
+        const sp = document.createElement("div");
+        sp.className = "spark";
         loader.appendChild(sp);
 
         const angle = (i / 20) * Math.PI * 2;
@@ -193,13 +232,13 @@ export default function LandingPage() {
       const sy = Math.sin(angle) * scatter;
       const rot = i * 72;
       card.style.transform = `translate(calc(-50% + ${sx}px), calc(-50% + ${sy}px)) rotate(${rot}deg) scale(0.65)`;
-      card.style.opacity = '0';
+      card.style.opacity = "0";
       return { card, sx, sy, angle, rot };
     });
 
     function phase5() {
-      const logoText = document.getElementById('loader-logo');
-      const tagEl = document.getElementById('loader-tagline');
+      const logoText = document.getElementById("loader-logo");
+      const tagEl = document.getElementById("loader-tagline");
       if (!logoText || !tagEl) return;
 
       tween(560, (t) => {
@@ -215,10 +254,10 @@ export default function LandingPage() {
       }, 230);
 
       schedule(() => {
-        loader.classList.add('exit');
+        loader.classList.add("exit");
 
         schedule(() => {
-          loader.style.display = 'none';
+          loader.style.display = "none";
           setIsSiteReady(true);
         }, 740);
       }, 1150);
@@ -253,21 +292,21 @@ export default function LandingPage() {
 
     function phase3() {
       cfgs.forEach(({ card }) => {
-        const img = card.querySelector('img') as HTMLImageElement | null;
+        const img = card.querySelector("img") as HTMLImageElement | null;
         if (!img) return;
-        img.style.filter = 'brightness(0) invert(1) brightness(4)';
+        img.style.filter = "brightness(0) invert(1) brightness(4)";
         schedule(() => {
-          img.style.transition = 'filter 0.35s ease';
-          img.style.filter = 'brightness(0) invert(1)';
+          img.style.transition = "filter 0.35s ease";
+          img.style.filter = "brightness(0) invert(1)";
         }, 60);
       });
 
       playJoinSound();
       spawnSparks();
-      glowBg.classList.add('bloom');
+      glowBg.classList.add("bloom");
 
-      shockRing.style.opacity = '1';
-      shockRing.style.transform = 'translate(-50%, -50%) scale(0)';
+      shockRing.style.opacity = "1";
+      shockRing.style.transform = "translate(-50%, -50%) scale(0)";
       rafs.push(
         requestAnimationFrame(() => {
           tween(700, (t) => {
@@ -352,190 +391,355 @@ export default function LandingPage() {
         <div id="loader-glow-bg" />
         <div id="shock-ring" />
         <div id="hand-canvas">
-          <div className="hand-card" id="hc1"><img src="/placeholder.svg" alt="" draggable="false" /></div>
-          <div className="hand-card" id="hc2"><img src="/placeholder.svg" alt="" draggable="false" /></div>
-          <div className="hand-card" id="hc3"><img src="/placeholder.svg" alt="" draggable="false" /></div>
-          <div className="hand-card" id="hc4"><img src="/placeholder.svg" alt="" draggable="false" /></div>
-          <div className="hand-card" id="hc5"><img src="/placeholder.svg" alt="" draggable="false" /></div>
-          <img id="logo-reveal" src="/placeholder.svg" alt="Bulqit" draggable="false" />
+          <div className="hand-card" id="hc1">
+            <img src="/placeholder.svg" alt="" draggable="false" />
+          </div>
+          <div className="hand-card" id="hc2">
+            <img src="/placeholder.svg" alt="" draggable="false" />
+          </div>
+          <div className="hand-card" id="hc3">
+            <img src="/placeholder.svg" alt="" draggable="false" />
+          </div>
+          <div className="hand-card" id="hc4">
+            <img src="/placeholder.svg" alt="" draggable="false" />
+          </div>
+          <div className="hand-card" id="hc5">
+            <img src="/placeholder.svg" alt="" draggable="false" />
+          </div>
+          <img
+            id="logo-reveal"
+            src="/placeholder.svg"
+            alt="Bulqit"
+            draggable="false"
+          />
         </div>
         <div id="loader-logo">Bulqit</div>
         <div id="loader-tagline">Collective Power. Smarter Buying.</div>
-        <div id="loader-bar-track"><div id="loader-bar" /></div>
+        <div id="loader-bar-track">
+          <div id="loader-bar" />
+        </div>
       </div>
 
-      <div id="site" className={isSiteReady ? 'show' : ''}>
+      <div id="site" className={isSiteReady ? "show" : ""}>
         {isSiteReady && (
           <>
-        <nav className="bulqit-nav">
-          <div className="bulqit-nav-logo">Bulqit</div>
-          <ul className="bulqit-nav-links">
-            <li><a href="#" onClick={(e) => { e.preventDefault(); scrollToHowItWorks(); }}>How it Works</a></li>
-            <li><a href="#">For Retailers</a></li>
-            <li><a href="#">Suppliers</a></li>
-            <li><a href="#">Pricing</a></li>
-            <li><a href="#">FAQs</a></li>
-          </ul>
-          <button className="bulqit-nav-cta" onClick={() => navigate('/pricing')}>Plans and Pricing</button>
-        </nav>
-
-        <section className="bulqit-hero">
-          <div className="bulqit-banner bulqit-fade-up bulqit-delay-1" onClick={() => navigate('/dashboard')}>
-            <div className="bulqit-banner-badge"><span>{'\u{1F525}'}</span> New</div>
-            Now live in Bangalore - <span className="bulqit-banner-link">500+ kirana stores joined</span>
-            <span className="bulqit-banner-arrow">›</span>
-          </div>
-
-          <h1 className="bulqit-headline bulqit-fade-up bulqit-delay-2">A buying group</h1>
-          <div className="bulqit-headline bulqit-headline-line2 bulqit-fade-up bulqit-delay-2">
-            <span className="bulqit-headline-static">acting like a</span>
-
-            <div className="bulqit-rolling-wrapper">
-              <span
-                className={`bulqit-rolling-pill-word ${isExiting ? 'bulqit-word-exit' : 'bulqit-word-enter'}`}
-                style={{
-                  ['--pill-tint-bg' as keyof CSSProperties]: activeWord.bg,
-                  ['--pill-tint-border' as keyof CSSProperties]: activeWord.border,
-                  ['--pill-tint-glow' as keyof CSSProperties]: activeWord.glow,
-                  color: activeWord.color,
-                  textShadow: `0 1px 0 rgba(255,255,255,0.45), 0 2px 16px ${activeWord.glow}`,
-                } as CSSProperties}
+            <nav className="bulqit-nav">
+              <div className="bulqit-nav-logo">Bulqit</div>
+              <ul className="bulqit-nav-links">
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToHowItWorks();
+                    }}
+                  >
+                    How it Works
+                  </a>
+                </li>
+                <li>
+                  <a href="#">For Retailers</a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate("/supplier/register");
+                    }}
+                  >
+                    Suppliers
+                  </a>
+                </li>
+                <li>
+                  <a href="#">Pricing</a>
+                </li>
+                <li>
+                  <a href="#">FAQs</a>
+                </li>
+              </ul>
+              <button
+                className="bulqit-nav-cta"
+                onClick={() => navigate("/pricing")}
               >
-                {activeWord.text}
-              </span>
-            </div>
-          </div>
+                Plans and Pricing
+              </button>
+            </nav>
 
-          <p className="bulqit-subheadline bulqit-fade-up bulqit-delay-3">
-            Not your average procurement tool. <strong>Bulqit</strong> is an AI-powered buying group that connects kirana stores, pharmacies &amp; restaurants - slashing costs by <strong>15-40%</strong> through collective bargaining.
-          </p>
+            <section className="bulqit-hero">
+              <div
+                className="bulqit-banner bulqit-fade-up bulqit-delay-1"
+                onClick={() => navigate("/dashboard")}
+              >
+                <div className="bulqit-banner-badge">
+                  <span>{"\u{1F525}"}</span> New
+                </div>
+                Now live in Bangalore -{" "}
+                <span className="bulqit-banner-link">
+                  500+ kirana stores joined
+                </span>
+                <span className="bulqit-banner-arrow">›</span>
+              </div>
 
-          <div className="bulqit-cta-group bulqit-fade-up bulqit-delay-4">
-            <button className="bulqit-btn-primary" onClick={() => navigate('/register')}>
-              <ArrowRight size={18} />
-              Join as a Retailer
-            </button>
-            <button className="bulqit-btn-secondary" onClick={scrollToHowItWorks}>
-              <div className="bulqit-btn-secondary-avatar">{'\u20B9'}</div>
-              See How It Works
-            </button>
-          </div>
+              <h1 className="bulqit-headline bulqit-fade-up bulqit-delay-2">
+                A buying group
+              </h1>
+              <div className="bulqit-headline bulqit-headline-line2 bulqit-fade-up bulqit-delay-2">
+                <span className="bulqit-headline-static">acting like a</span>
 
-          <div className="bulqit-features-strip bulqit-fade-up bulqit-delay-5">
-            <div className="bulqit-feature-item">
-              <div className="bulqit-feature-icon"><Users size={20} /></div>
-              AI-Matched Buying Groups
-            </div>
-            <div className="bulqit-feature-item">
-              <div className="bulqit-feature-icon"><IndianRupee size={20} /></div>
-              Save {'\u20B9'}15,000+ Per Month
-            </div>
-            <div className="bulqit-feature-item">
-              <div className="bulqit-feature-icon"><Mail size={20} /></div>
-              Instant AI Negotiation Emails
-            </div>
-          </div>
-        </section>
+                <div className="bulqit-rolling-wrapper">
+                  <span
+                    className={`bulqit-rolling-pill-word ${isExiting ? "bulqit-word-exit" : "bulqit-word-enter"}`}
+                    style={
+                      {
+                        ["--pill-tint-bg" as keyof CSSProperties]:
+                          activeWord.bg,
+                        ["--pill-tint-border" as keyof CSSProperties]:
+                          activeWord.border,
+                        ["--pill-tint-glow" as keyof CSSProperties]:
+                          activeWord.glow,
+                        color: activeWord.color,
+                        textShadow: `0 1px 0 rgba(255,255,255,0.45), 0 2px 16px ${activeWord.glow}`,
+                      } as CSSProperties
+                    }
+                  >
+                    {activeWord.text}
+                  </span>
+                </div>
+              </div>
 
-        <section id="how-it-works-section">
-          <HowItWorksPage />
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-green-500">Real Results</Badge>
-              <h2 className="text-4xl font-bold mb-4">
-                Trusted by 500+ Retailers Across Bengaluru
-              </h2>
-              <p className="text-xl text-gray-600">
-                Join thousands of small businesses saving 15-20% on every order
+              <p className="bulqit-subheadline bulqit-fade-up bulqit-delay-3">
+                Not your average procurement tool. <strong>Bulqit</strong> is an
+                AI-powered buying group that connects kirana stores, pharmacies
+                &amp; restaurants - slashing costs by <strong>15-40%</strong>{" "}
+                through collective bargaining.
               </p>
-            </div>
 
-            {/* Stats Banner */}
-            <div className="grid grid-cols-4 gap-6 mb-12">
-              <Card className="p-6 text-center bg-gradient-to-br from-green-500 to-green-600 text-white">
-                <div className="text-4xl font-bold mb-2">{'\u20B9'}2.4Cr</div>
-                <div className="text-sm opacity-90">Total Savings Generated</div>
-              </Card>
-              <Card className="p-6 text-center bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-                <div className="text-4xl font-bold mb-2">500+</div>
-                <div className="text-sm opacity-90">Active Retailers</div>
-              </Card>
-              <Card className="p-6 text-center bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-                <div className="text-4xl font-bold mb-2">87%</div>
-                <div className="text-sm opacity-90">Success Rate</div>
-              </Card>
-              <Card className="p-6 text-center bg-gradient-to-br from-yellow-500 to-orange-500 text-white">
-                <div className="text-4xl font-bold mb-2">4.8{'\u2605'}</div>
-                <div className="text-sm opacity-90">Average Rating</div>
-              </Card>
-            </div>
+              <div className="bulqit-cta-group bulqit-fade-up bulqit-delay-4">
+                <button
+                  className="bulqit-btn-primary"
+                  onClick={() => navigate("/register")}
+                >
+                  <ArrowRight size={18} />
+                  Join as a Retailer
+                </button>
+                <button
+                  className="bulqit-btn-secondary"
+                  onClick={scrollToHowItWorks}
+                >
+                  <div className="bulqit-btn-secondary-avatar">{"\u20B9"}</div>
+                  See How It Works
+                </button>
+              </div>
 
-            {/* Testimonial Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockTestimonials.map(testimonial => (
-                <Card key={testimonial.id} className="p-6 hover:shadow-xl transition-all">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="text-5xl">{testimonial.photo}</div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-bold">{testimonial.name}</h3>
-                        {testimonial.verified && (
-                          <CheckCircle className="w-4 h-4 text-blue-500" />
-                        )}
+              <div className="bulqit-features-strip bulqit-fade-up bulqit-delay-5">
+                <div className="bulqit-feature-item">
+                  <div className="bulqit-feature-icon">
+                    <Users size={20} />
+                  </div>
+                  AI-Matched Buying Groups
+                </div>
+                <div className="bulqit-feature-item">
+                  <div className="bulqit-feature-icon">
+                    <IndianRupee size={20} />
+                  </div>
+                  Save {"\u20B9"}15,000+ Per Month
+                </div>
+                <div className="bulqit-feature-item">
+                  <div className="bulqit-feature-icon">
+                    <Mail size={20} />
+                  </div>
+                  Instant AI Negotiation Emails
+                </div>
+              </div>
+            </section>
+
+            <section id="how-it-works-section">
+              <HowItWorksPage />
+            </section>
+
+            {/* Real Results & AI Negotiator Section */}
+            <section className="py-20 bg-gradient-to-b from-white via-slate-50 to-indigo-50">
+              <div className="max-w-7xl mx-auto px-6 space-y-12">
+                <div className="text-center space-y-3">
+                  <Badge className="mb-2 bg-emerald-500/90 text-white shadow-sm">
+                    Real Results from Demo Users
+                  </Badge>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                    Bulqit is already negotiating better deals for retailers
+                    like you
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto">
+                    Live numbers from our demo cohorts — total savings, active
+                    users, AI negotiation success rate and more.
+                  </p>
+                </div>
+
+                {/* Stats + AI negotiator highlight */}
+                <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.25fr)] items-stretch">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <Card className="p-5 bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-none shadow-lg">
+                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                        Total Savings
                       </div>
-                      <div className="text-sm text-gray-600">{testimonial.storeName}</div>
-                      <div className="flex items-center gap-1 mt-1">
-                        <Badge variant="outline" className="text-xs">{testimonial.storeType}</Badge>
+                      <div className="text-3xl md:text-4xl font-extrabold">
+                        {"\u20B9"}2.4Cr
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="relative mb-4">
-                    <Quote className="w-8 h-8 text-gray-200 absolute -top-2 -left-2" />
-                    <p className="text-gray-700 italic pl-6">
-                      "{testimonial.quote}"
-                    </p>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t">
-                    <div>
-                      <div className="text-sm text-gray-600">Monthly Savings</div>
-                      <div className="text-xl font-bold text-green-600">
-                        {'\u20B9'}{testimonial.savings.toLocaleString()}
+                      <div className="text-xs mt-2 opacity-90">
+                        Across all demo buying groups
                       </div>
-                    </div>
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-current" />
-                      ))}
-                    </div>
+                    </Card>
+                    <Card className="p-5 bg-gradient-to-br from-sky-500 to-sky-600 text-white border-none shadow-lg">
+                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                        Active Retailers
+                      </div>
+                      <div className="text-3xl md:text-4xl font-extrabold">
+                        500+
+                      </div>
+                      <div className="text-xs mt-2 opacity-90">
+                        Kirana, medical &amp; restaurant stores
+                      </div>
+                    </Card>
+                    <Card className="p-5 bg-gradient-to-br from-violet-500 to-indigo-600 text-white border-none shadow-lg md:col-span-1 col-span-2 md:col-auto">
+                      <div className="text-xs uppercase tracking-wide opacity-90 mb-1">
+                        AI Deal Success
+                      </div>
+                      <div className="text-3xl md:text-4xl font-extrabold">
+                        87%
+                      </div>
+                      <div className="text-xs mt-2 opacity-90">
+                        AI-negotiated emails that improved pricing
+                      </div>
+                    </Card>
                   </div>
 
-                  <div className="text-xs text-gray-500 mt-2">
-                    {'\u{1F4CD}'} {testimonial.location}
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+                  <Card className="relative overflow-hidden border border-indigo-100/80 bg-white/70 backdrop-blur-sm shadow-lg">
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-sky-500/5 to-emerald-500/5 pointer-events-none" />
+                    <div className="relative p-6 space-y-4">
+                      <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 border border-indigo-100">
+                        <Sparkles className="w-4 h-4" />
+                        AI Negotiator
+                      </div>
+                      <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
+                        <MessageSquare className="w-5 h-5 text-indigo-600" />
+                        See how AI writes your supplier emails
+                      </h3>
+                      <p className="text-sm text-slate-600">
+                        Bulqit&apos;s AI Negotiation Center turns your order
+                        details into a polished, B2B-ready email that gets
+                        better discounts — usually in under{" "}
+                        <span className="font-semibold text-slate-900">
+                          3 seconds
+                        </span>
+                        .
+                      </p>
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div className="rounded-xl bg-slate-900 text-slate-50 px-3 py-3">
+                          <div className="opacity-80 mb-1">Avg. Rating</div>
+                          <div className="text-lg font-semibold">
+                            4.8
+                            <span className="align-middle text-amber-300">
+                              {"\u2605"}
+                            </span>
+                          </div>
+                          <div className="mt-1 text-[11px] opacity-80">
+                            From demo user feedback
+                          </div>
+                        </div>
+                        <div className="rounded-xl bg-slate-100 px-3 py-3">
+                          <div className="text-slate-500 mb-1">
+                            Negotiation Speed
+                          </div>
+                          <div className="text-lg font-semibold text-slate-900">
+                            2.8s
+                          </div>
+                          <div className="mt-1 text-[11px] text-slate-500">
+                            Avg. email generation time
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/register")}
+                        className="inline-flex items-center gap-2 rounded-full bg-slate-900 text-slate-50 px-4 py-2 text-xs font-medium shadow-md hover:bg-black transition-colors"
+                      >
+                        Try the AI Negotiator
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Demo user quotes */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {mockTestimonials.map((testimonial) => (
+                    <Card
+                      key={testimonial.id}
+                      className="p-6 border border-slate-200/80 bg-white/80 backdrop-blur-sm hover:-translate-y-1 hover:shadow-xl transition-all duration-200"
+                    >
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-2xl shadow-sm">
+                          {testimonial.photo}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-semibold text-slate-900">
+                              {testimonial.name}
+                            </h3>
+                            {testimonial.verified && (
+                              <CheckCircle className="w-4 h-4 text-emerald-500" />
+                            )}
+                          </div>
+                          <div className="text-xs text-slate-500">
+                            {testimonial.storeName}
+                          </div>
+                          <div className="flex items-center gap-1 mt-1">
+                            <Badge
+                              variant="outline"
+                              className="text-[11px] px-2 py-0.5 border-slate-200 text-slate-700"
+                            >
+                              {testimonial.storeType}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="relative mb-4">
+                        <Quote className="w-8 h-8 text-slate-200 absolute -top-2 -left-2" />
+                        <p className="text-sm text-slate-700 italic pl-6 leading-relaxed">
+                          "{testimonial.quote}"
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                        <div>
+                          <div className="text-xs text-slate-500">
+                            Monthly Savings
+                          </div>
+                          <div className="text-lg font-semibold text-emerald-600">
+                            {"\u20B9"}
+                            {testimonial.savings.toLocaleString()}
+                          </div>
+                        </div>
+                        <div className="flex text-amber-400">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="text-[11px] text-slate-500 mt-3 flex items-center gap-1">
+                        <span>{"\u{1F4CD}"}</span>
+                        <span>{testimonial.location}</span>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </section>
           </>
         )}
       </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-

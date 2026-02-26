@@ -18,7 +18,7 @@ export const mockTestimonials: Testimonial[] = [
     storeType: 'Medical',
     location: 'Jayanagar, Bengaluru',
     quote:
-      'BulkBridge saved us ₹18,000 in the first month itself! The group buying is so easy - just one click and we get bulk prices. No more running to wholesale markets.',
+      'Bulqit saved us ₹18,000 in the first month itself! The group buying is so easy - just one click and we get bulk prices. No more running to wholesale markets.',
     savings: 18000,
     photo: '👨‍⚕️',
     verified: true,
@@ -78,7 +78,7 @@ export const mockTestimonials: Testimonial[] = [
     storeType: 'Kirana',
     location: 'Whitefield, Bengaluru',
     quote:
-      'Small retailers like us always struggle with prices. BulkBridge changed everything. Now we get wholesale rates without the hassle!',
+      'Small retailers like us always struggle with prices. Bulqit changed everything. Now we get wholesale rates without the hassle!',
     savings: 8500,
     photo: '👩',
     verified: true,

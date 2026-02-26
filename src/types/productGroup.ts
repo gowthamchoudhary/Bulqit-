@@ -1,10 +1,10 @@
 export interface ProductGroup {
   id: string;
   productName: string;
-  category: 'Medical' | 'Kirana' | 'Restaurant' | 'Stationery' | 'Electronics';
+  category: "Medical" | "Kirana" | "Restaurant" | "Stationery" | "Electronics";
 
   // Group status
-  status: 'active' | 'confirming' | 'ordering' | 'completed';
+  status: "active" | "confirming" | "ordering" | "completed";
   currentMembers: number;
   targetMembers: number;
   spotsLeft: number;
@@ -19,7 +19,7 @@ export interface ProductGroup {
   savingsPerOrder: number;
 
   // Schedule
-  orderFrequency: 'Weekly' | 'Bi-weekly' | 'Monthly';
+  orderFrequency: "Weekly" | "Bi-weekly" | "Monthly";
   nextOrderDate: string;
   nextOrderDay: string;
 
@@ -45,6 +45,20 @@ export interface ProductGroup {
   advancePaymentDeadline?: string;
 }
 
+export interface ProductPricing {
+  productName: string;
+  basePrice: number; // per unit
+  unit: "kg" | "piece" | "bottle" | "box" | "liter";
+  moq: number; // minimum order quantity
+  available: boolean;
+}
+
+export interface DiscountTier {
+  minQuantity: number;
+  maxQuantity: number;
+  discountPercent: number;
+}
+
 export interface GroupMember {
   id: string;
   retailerId: string;
@@ -52,7 +66,7 @@ export interface GroupMember {
   storeType: string;
   quantity: number; // units they want to order
   totalAmount: number; // total they'll pay
-  confirmationStatus: 'pending' | 'confirmed' | 'payment_pending' | 'paid';
+  confirmationStatus: "pending" | "confirmed" | "payment_pending" | "paid";
   joinedAt: string;
   confirmedAt?: string;
   paidAt?: string;

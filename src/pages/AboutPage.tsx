@@ -66,7 +66,7 @@ export function AboutPage() {
         </section>
 
         <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">How BulkBridge Changes Everything</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">How Bulqit Changes Everything</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <Card className="p-8">
               <div className="flex items-center gap-3 mb-4">
