@@ -31,12 +31,20 @@ export default function GroupFormPage() {
     saveGroup({
       id: 'g_' + Date.now(),
       name,
-      categories: selectedCats,
-      frequency,
-      members: [user!.id],
+      status: 'forming',
+      members: [{ retailerId: user!.id, storeName: user!.storeName, joinedAt: new Date().toISOString() }],
+      targetMembers: 5,
+      products: selectedCats.map(c => ({ name: c, quantity: 0, contributions: {} })),
+      supplierId: '',
+      supplierName: '',
       totalValue: savings.total,
+      estimatedSavings: savings.yourSavings,
+      savingsPercent: savings.discountPercent,
+      discountTier: { minQuantity: 0, maxQuantity: 0, discountPercent: savings.discountPercent },
       createdDate: new Date().toISOString(),
-    });
+      orderDeadline: new Date(Date.now() + 7 * 86400000).toISOString(),
+      frequency,
+    } satisfies import('@/types/retailer').BuyingGroup);
     navigate('/dashboard');
   };
 

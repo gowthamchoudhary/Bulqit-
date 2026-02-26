@@ -156,7 +156,7 @@ export function EnhancedRegistrationForm() {
       numberOfEmployees: Number(formData.numberOfEmployees) || 1,
       storeFrontPhoto: formData.storeFrontPhoto || undefined,
       joinedDate: new Date().toISOString(),
-      languagePreference: (localStorage.getItem('bulqit_language') ?? 'en'),
+      languagePreference: (localStorage.getItem('bulqit_language') ?? 'en') as import('@/types/retailer').LanguageCode,
     };
 
     // Persist user in auth/storage so dashboard route guard passes.
@@ -420,7 +420,7 @@ export function EnhancedRegistrationForm() {
                 <Select
                   value={formData.storeType}
                   onValueChange={(value) => {
-                    handleChange('storeType', value);
+                    handleChange('storeType', value as import('@/types/retailer').StoreType);
                     if (productSuggestions[value as StoreType]) handleChange('products', []);
                   }}
                 >

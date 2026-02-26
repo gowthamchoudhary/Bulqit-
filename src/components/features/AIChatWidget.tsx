@@ -38,7 +38,7 @@ export function AIChatWidget() {
       storeName: user?.storeName,
       storeType: user?.storeType,
       route: location.pathname,
-      monthlySavings: user?.groupsJoined ? user.groupsJoined * 3000 : undefined,
+      monthlySavings: undefined,
     }),
     [location.pathname, user],
   );
