@@ -1,4 +1,4 @@
-﻿import { type CSSProperties, type ReactNode } from "react";
+﻿import { type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search,
@@ -11,17 +11,12 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-/* -----------------------------------------------------------------------------
-   DESIGN TOKENS — mirrors the landing page exactly
-   bg: #F0EFED · dashed grid · DM Sans · dark-pill CTAs · black+gold accents
------------------------------------------------------------------------------ */
-
 export function HowItWorksPage() {
   const navigate = useNavigate();
 
   return (
     <div
-      className="min-h-screen"
+      className="hiw-root"
       style={{
         fontFamily: "'DM Sans', sans-serif",
         backgroundColor: "#F0EFED",
@@ -29,9 +24,11 @@ export function HowItWorksPage() {
           "linear-gradient(rgba(0,0,0,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.12) 1px, transparent 1px)",
         backgroundSize: "80px 80px",
         color: "#111111",
+        overflowX: "hidden",
+        width: "100%",
       }}
     >
-      {/* -- HERO ----------------------------------------------------------- */}
+      {/* ── HERO ── */}
       <section
         style={{
           textAlign: "center",
@@ -40,7 +37,6 @@ export function HowItWorksPage() {
           position: "relative",
         }}
       >
-        {/* Eyebrow pill */}
         <div
           style={{
             display: "inline-flex",
@@ -71,7 +67,6 @@ export function HowItWorksPage() {
           </span>
           No coordination. No calls. Just savings.
         </div>
-
         <h1
           style={{
             fontSize: "clamp(40px, 5.5vw, 66px)",
@@ -84,7 +79,6 @@ export function HowItWorksPage() {
         >
           How Bulqit works
         </h1>
-
         <p
           style={{
             fontSize: 18,
@@ -99,7 +93,7 @@ export function HowItWorksPage() {
         </p>
       </section>
 
-      {/* -- WHO IS THIS FOR ------------------------------------------------ */}
+      {/* ── WHO IS THIS FOR ── */}
       <section
         style={{ maxWidth: 1100, margin: "0 auto", padding: "88px 32px" }}
       >
@@ -111,6 +105,7 @@ export function HowItWorksPage() {
         </p>
 
         <div
+          className="hiw-retailer-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
@@ -129,7 +124,7 @@ export function HowItWorksPage() {
               desc: "Rice, dal, oil, spices, packaged goods — join bulk groups with nearby kirana owners and cut wholesale costs.",
             },
             {
-              emoji: "🥐",
+              emoji: "🍞",
               title: "Bakeries",
               save: "Avg. save ₹12,000/mo",
               desc: "Pool orders for flour, sugar, butter and baking ingredients with other bakeries to unlock distributor-level pricing.",
@@ -143,6 +138,7 @@ export function HowItWorksPage() {
           ].map((r, i, arr) => (
             <div
               key={r.title}
+              className="hiw-retailer-cell"
               style={{
                 padding: "32px 28px",
                 borderRight:
@@ -179,7 +175,7 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      {/* -- 3 STEPS -------------------------------------------------------- */}
+      {/* ── 3 STEPS ── */}
       <section
         style={{
           maxWidth: 1100,
@@ -196,6 +192,7 @@ export function HowItWorksPage() {
         </p>
 
         <div
+          className="hiw-steps-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3,1fr)",
@@ -206,7 +203,6 @@ export function HowItWorksPage() {
             marginTop: 52,
           }}
         >
-          {/* Step 1 */}
           <StepCard
             num="01"
             icon={<Search size={20} strokeWidth={1.8} />}
@@ -230,7 +226,6 @@ export function HowItWorksPage() {
             </div>
           </StepCard>
 
-          {/* Step 2 */}
           <StepCard
             num="02"
             icon={<Users size={20} strokeWidth={1.8} />}
@@ -271,7 +266,6 @@ export function HowItWorksPage() {
             </div>
           </StepCard>
 
-          {/* Step 3 */}
           <StepCard
             num="03"
             icon={<TrendingDown size={20} strokeWidth={1.8} />}
@@ -301,7 +295,7 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      {/* -- AI DARK SECTION ------------------------------------------------ */}
+      {/* ── AI DARK SECTION ── */}
       <section
         style={{
           background: "#0D0D0D",
@@ -312,7 +306,6 @@ export function HowItWorksPage() {
           overflow: "hidden",
         }}
       >
-        {/* Glow */}
         <div
           style={{
             position: "absolute",
@@ -327,7 +320,6 @@ export function HowItWorksPage() {
             pointerEvents: "none",
           }}
         />
-
         <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <Sparkles size={32} color="#FFB800" style={{ marginBottom: 12 }} />
@@ -348,6 +340,7 @@ export function HowItWorksPage() {
           </div>
 
           <div
+            className="hiw-ai-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(2,1fr)",
@@ -386,6 +379,7 @@ export function HowItWorksPage() {
             ].map((c, i) => (
               <div
                 key={c.title}
+                className="hiw-ai-cell"
                 style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.06)",
@@ -444,7 +438,7 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      {/* -- TIMELINE ------------------------------------------------------- */}
+      {/* ── TIMELINE ── */}
       <section
         style={{
           background: "#fff",
@@ -457,9 +451,7 @@ export function HowItWorksPage() {
           <p style={{ ...sectionSub, marginBottom: 0 }}>
             A kirana store owner joins the Basmati Rice Group on Monday.
           </p>
-
           <div style={{ marginTop: 52, position: "relative" }}>
-            {/* Vertical line */}
             <div
               style={{
                 position: "absolute",
@@ -470,7 +462,6 @@ export function HowItWorksPage() {
                 borderLeft: "1px dashed rgba(0,0,0,0.12)",
               }}
             />
-
             {[
               {
                 icon: <Users size={18} />,
@@ -565,7 +556,7 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      {/* -- COMPARISON ----------------------------------------------------- */}
+      {/* ── COMPARISON ── */}
       <section
         style={{ maxWidth: 1100, margin: "0 auto", padding: "88px 32px" }}
       >
@@ -576,6 +567,7 @@ export function HowItWorksPage() {
         </p>
 
         <div
+          className="hiw-compare-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
@@ -583,7 +575,6 @@ export function HowItWorksPage() {
             marginTop: 52,
           }}
         >
-          {/* Bad */}
           <div
             style={{
               borderRadius: 20,
@@ -658,7 +649,6 @@ export function HowItWorksPage() {
             ))}
           </div>
 
-          {/* Good */}
           <div
             style={{
               borderRadius: 20,
@@ -744,7 +734,7 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      {/* -- CTA ------------------------------------------------------------ */}
+      {/* ── CTA ── */}
       <section
         style={{
           background: "#000",
@@ -771,7 +761,7 @@ export function HowItWorksPage() {
         <div style={{ position: "relative" }}>
           <h2
             style={{
-              fontSize: "clamp(32px, 4vw, 52px)",
+              fontSize: "clamp(28px, 4vw, 52px)",
               fontWeight: 900,
               letterSpacing: "-0.035em",
               color: "#fff",
@@ -793,6 +783,7 @@ export function HowItWorksPage() {
             without a single phone call.
           </p>
           <div
+            className="hiw-cta-btns"
             style={{
               display: "flex",
               gap: 12,
@@ -839,14 +830,69 @@ export function HowItWorksPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ MOBILE-ONLY STYLES — desktop (>768px) completely untouched ══ */}
+      <style>{`
+        @media (max-width: 768px) {
+
+          /* Kill horizontal scroll */
+          .hiw-root { overflow-x: hidden !important; width: 100% !important; }
+          .hiw-root section {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            padding-top: 52px !important;
+            padding-bottom: 52px !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+          }
+          /* Inner max-width divs */
+          .hiw-root section > div {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            max-width: 100% !important;
+          }
+
+          /* Retailer cards: 3-col → 1-col */
+          .hiw-retailer-grid { grid-template-columns: 1fr !important; }
+          .hiw-retailer-cell { border-right: none !important; border-bottom: 1px dashed rgba(0,0,0,0.12) !important; }
+          .hiw-retailer-cell:last-child { border-bottom: none !important; }
+
+          /* 3 Steps: 3-col → 1-col */
+          .hiw-steps-grid {
+            grid-template-columns: 1fr !important;
+            border: none !important;
+            gap: 12px !important;
+          }
+          .hiw-steps-grid > div {
+            border: 1px solid rgba(0,0,0,0.08) !important;
+            border-radius: 16px !important;
+            padding: 24px 20px !important;
+          }
+
+          /* AI 2x2 → 1-col */
+          .hiw-ai-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+          .hiw-ai-cell { border-radius: 14px !important; padding: 20px 18px !important; }
+
+          /* Comparison: 2-col → 1-col */
+          .hiw-compare-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .hiw-compare-grid > div { padding: 24px 20px !important; }
+
+          /* CTA buttons full width */
+          .hiw-cta-btns { flex-direction: column !important; padding: 0 !important; }
+          .hiw-cta-btns button { width: 100% !important; justify-content: center !important; }
+
+          /* Font sizes */
+          .hiw-root h1 { font-size: clamp(26px, 8vw, 38px) !important; }
+          .hiw-root h2 { font-size: clamp(22px, 7vw, 32px) !important; }
+          .hiw-root p  { max-width: 100% !important; }
+        }
+      `}</style>
     </div>
   );
 }
 
-/* -----------------------------------------------------------------------------
-   SHARED STYLE TOKENS
------------------------------------------------------------------------------ */
-const sectionTitle: CSSProperties = {
+/* ── Style tokens (desktop — unchanged) ── */
+const sectionTitle: React.CSSProperties = {
   fontSize: "clamp(28px, 3.2vw, 42px)",
   fontWeight: 800,
   letterSpacing: "-0.03em",
@@ -854,13 +900,13 @@ const sectionTitle: CSSProperties = {
   lineHeight: 1.1,
   marginBottom: 12,
 };
-const sectionSub: CSSProperties = {
+const sectionSub: React.CSSProperties = {
   fontSize: 17,
   color: "#555",
   lineHeight: 1.65,
   maxWidth: 500,
 };
-const mockupBox: CSSProperties = {
+const mockupBox: React.CSSProperties = {
   marginTop: 24,
   background: "#F0EFED",
   border: "1px dashed rgba(0,0,0,0.12)",
@@ -868,9 +914,6 @@ const mockupBox: CSSProperties = {
   padding: 16,
 };
 
-/* -----------------------------------------------------------------------------
-   SUB-COMPONENTS
------------------------------------------------------------------------------ */
 function SectionLabel({
   children,
   light = false,

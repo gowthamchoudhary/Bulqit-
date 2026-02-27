@@ -9,17 +9,13 @@ import {
   TrendingUp,
   Zap,
   Mail,
-  Package,
   Users,
-  IndianRupee,
-  Percent,
   ChevronDown,
   ChevronUp,
   Plus,
   Trash2,
   Star,
   Clock,
-  Phone,
   Building2,
   AlertCircle,
 } from "lucide-react";
@@ -28,9 +24,6 @@ import { generateNegotiationEmail } from "@/lib/aiNegotiation";
 import { mockSuppliers } from "@/data/mockSuppliers";
 import { DemoModeBanner } from "@/components/features/DemoModeBanner";
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   DESIGN TOKENS
-───────────────────────────────────────────────────────────────────────────── */
 const T = {
   bg: "#F0EFED",
   bgWhite: "#ffffff",
@@ -45,9 +38,6 @@ const T = {
   font: "'DM Sans', sans-serif",
 };
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   EMAIL TONE OPTIONS
-───────────────────────────────────────────────────────────────────────────── */
 const TONES = [
   {
     id: "professional",
@@ -108,16 +98,13 @@ const EMAIL_GOALS = [
   },
 ];
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   COMPONENT
-───────────────────────────────────────────────────────────────────────────── */
 export function NegotiationCenterPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedEmail, setGeneratedEmail] = useState<any>(null);
   const [copied, setCopied] = useState(false);
   const [showTips, setShowTips] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  /* Form state */
   const [groupName, setGroupName] = useState("Jayanagar Medical Alliance");
   const [memberCount, setMemberCount] = useState(5);
   const [selectedSupplier, setSelectedSupplier] = useState(mockSuppliers[0].id);
@@ -135,8 +122,6 @@ export function NegotiationCenterPage() {
   ]);
 
   const supplier = mockSuppliers.find((s) => s.id === selectedSupplier);
-
-  /* Calculated */
   const estimatedSavings = Math.round(totalValue * (targetDiscount / 100));
 
   const handleGenerate = async () => {
@@ -181,11 +166,336 @@ export function NegotiationCenterPage() {
     setProducts((p) => [...p, { name: "", quantity: 0, unit: "units" }]);
   const removeProduct = (i: number) =>
     setProducts((p) => p.filter((_, idx) => idx !== i));
-  const updateProduct = (i: number, field: string, val: string | number) => {
+  const updateProduct = (i: number, field: string, val: string | number) =>
     setProducts((p) =>
       p.map((item, idx) => (idx === i ? { ...item, [field]: val } : item)),
     );
-  };
+
+  /* ── Sidebar content (shared between desktop sidebar + mobile accordion) ── */
+  const SidebarContent = () => (
+    <>
+      {/* AI Engine card */}
+      <div
+        style={{
+          background: "#0D0D0D",
+          border: `1px solid rgba(255,255,255,0.07)`,
+          borderRadius: 20,
+          padding: 24,
+          boxShadow: `0 0 0 1px ${T.goldBorder}, 0 8px 32px rgba(255,184,0,0.08)`,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 16,
+          }}
+        >
+          <div
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 9,
+              background: T.goldSoft,
+              border: `1px solid ${T.goldBorder}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Zap size={15} color={T.gold} />
+          </div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>
+              AI Engine
+            </div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
+              Llama 3.1 · Groq API
+            </div>
+          </div>
+        </div>
+        {[
+          { label: "Generation Speed", val: "2.8s", pct: 95, color: "#22C55E" },
+          { label: "Quality Score", val: "9.2/10", pct: 92, color: T.gold },
+          { label: "Success Rate", val: "87%", pct: 87, color: "#A78BFA" },
+        ].map((stat) => (
+          <div key={stat.label} style={{ marginBottom: 14 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 5,
+              }}
+            >
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}>
+                {stat.label}
+              </span>
+              <span
+                style={{ fontSize: 12, fontWeight: 700, color: stat.color }}
+              >
+                {stat.val}
+              </span>
+            </div>
+            <div
+              style={{
+                height: 4,
+                background: "rgba(255,255,255,0.06)",
+                borderRadius: 100,
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${stat.pct}%`,
+                  background: stat.color,
+                  borderRadius: 100,
+                }}
+              />
+            </div>
+          </div>
+        ))}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            marginTop: 16,
+          }}
+        >
+          {[
+            "Context-aware negotiation",
+            "Indian B2B market trained",
+            "Multi-language support (soon)",
+          ].map((f) => (
+            <div
+              key={f}
+              style={{
+                display: "flex",
+                gap: 8,
+                fontSize: 12,
+                color: "rgba(255,255,255,0.4)",
+              }}
+            >
+              <CheckCircle
+                size={13}
+                color={T.gold}
+                style={{ flexShrink: 0, marginTop: 1 }}
+              />
+              {f}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Deal summary */}
+      <div
+        style={{
+          background: T.bgWhite,
+          border: `1px solid ${T.border}`,
+          borderRadius: 18,
+          padding: 22,
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+        }}
+      >
+        <div
+          style={{
+            fontSize: 13,
+            fontWeight: 700,
+            color: T.textDark,
+            marginBottom: 14,
+          }}
+        >
+          Your Deal Summary
+        </div>
+        {[
+          {
+            label: "Order Value",
+            val: `₹${totalValue.toLocaleString()}`,
+            color: T.textDark,
+          },
+          { label: "Target Disc.", val: `${targetDiscount}%`, color: T.gold },
+          {
+            label: "Est. Savings",
+            val: `₹${estimatedSavings.toLocaleString()}`,
+            color: "#22C55E",
+          },
+          {
+            label: "Group Size",
+            val: `${memberCount} retailers`,
+            color: "#6474F0",
+          },
+        ].map((row) => (
+          <div
+            key={row.label}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "9px 0",
+              borderBottom: `1px dashed ${T.borderDash}`,
+            }}
+          >
+            <span style={{ fontSize: 12, color: T.textLight }}>
+              {row.label}
+            </span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: row.color }}>
+              {row.val}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Pro tips */}
+      <div
+        style={{
+          background: T.bgWhite,
+          border: `1px solid ${T.border}`,
+          borderRadius: 18,
+          overflow: "hidden",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+        }}
+      >
+        <button
+          onClick={() => setShowTips(!showTips)}
+          style={{
+            width: "100%",
+            padding: "16px 20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: T.font,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontSize: 14,
+              fontWeight: 700,
+              color: T.textDark,
+            }}
+          >
+            <TrendingUp size={15} /> Negotiation Pro Tips
+          </div>
+          {showTips ? (
+            <ChevronUp size={15} color={T.textLight} />
+          ) : (
+            <ChevronDown size={15} color={T.textLight} />
+          )}
+        </button>
+        {showTips && (
+          <div
+            style={{
+              padding: "16px 20px 20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+              borderTop: `1px dashed ${T.borderDash}`,
+            }}
+          >
+            {[
+              {
+                emoji: "💡",
+                tip: "Mention your group size first — it shows combined buying power suppliers can't ignore.",
+              },
+              {
+                emoji: "📞",
+                tip: "End with a call-to-action — ask for a 15-minute call, not just a reply.",
+              },
+              {
+                emoji: "💳",
+                tip: "Highlight payment reliability. Guaranteed payment within 48hrs is a huge motivator.",
+              },
+              {
+                emoji: "📅",
+                tip: "Mention repeat order frequency. Monthly orders beat a one-time bulk deal.",
+              },
+              {
+                emoji: "🤝",
+                tip: 'Offer a "pilot order" at your target price. Lower risk gets more yes-es.',
+              },
+              {
+                emoji: "📊",
+                tip: "Include the rupee value you're asking for — makes it concrete, not abstract.",
+              },
+            ].map((t, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  padding: "10px 12px",
+                  background: T.bg,
+                  borderRadius: 10,
+                  fontSize: 12,
+                  color: T.textMid,
+                  lineHeight: 1.6,
+                }}
+              >
+                <span style={{ flexShrink: 0 }}>{t.emoji}</span>
+                {t.tip}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Best results hint */}
+      <div
+        style={{
+          background: T.goldSoft,
+          border: `1px solid ${T.goldBorder}`,
+          borderRadius: 16,
+          padding: 20,
+        }}
+      >
+        <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <AlertCircle
+            size={15}
+            color="#7A5800"
+            style={{ flexShrink: 0, marginTop: 1 }}
+          />
+          <div>
+            <div
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: "#7A5800",
+                marginBottom: 8,
+              }}
+            >
+              For Best Results
+            </div>
+            {[
+              "Fill in your actual group name",
+              "Set a realistic discount (15–25%)",
+              "Add all products you want to order",
+              "Mention any deadline or urgency",
+            ].map((tip) => (
+              <div
+                key={tip}
+                style={{
+                  display: "flex",
+                  gap: 6,
+                  fontSize: 12,
+                  color: "#7A5800",
+                  marginBottom: 4,
+                }}
+              >
+                <span>•</span>
+                {tip}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 
   return (
     <div
@@ -198,7 +508,7 @@ export function NegotiationCenterPage() {
         backgroundSize: "80px 80px",
       }}
     >
-      {/* ── HERO ── */}
+      {/* HERO */}
       <div
         style={{
           background: "#0D0D0D",
@@ -283,8 +593,6 @@ export function NegotiationCenterPage() {
             Generate professional supplier negotiation emails in seconds. Tell
             us your deal details — AI writes the perfect email for you.
           </p>
-
-          {/* Stats row */}
           <div
             style={{
               display: "flex",
@@ -326,7 +634,7 @@ export function NegotiationCenterPage() {
         </div>
       </div>
 
-      {/* ── BODY ── */}
+      {/* BODY */}
       <div
         style={{
           maxWidth: 1200,
@@ -338,7 +646,36 @@ export function NegotiationCenterPage() {
           <DemoModeBanner />
         </div>
 
+        {/* ── MOBILE SIDEBAR ACCORDION (hidden on desktop) ── */}
+        <div className="m-sidebar-wrap">
+          <button
+            className="m-sidebar-toggle"
+            onClick={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+          >
+            <span>⚡ AI Stats & Deal Summary</span>
+            {mobileSidebarOpen ? (
+              <ChevronUp size={16} />
+            ) : (
+              <ChevronDown size={16} />
+            )}
+          </button>
+          {mobileSidebarOpen && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 14,
+                paddingTop: 14,
+              }}
+            >
+              <SidebarContent />
+            </div>
+          )}
+        </div>
+
+        {/* MAIN GRID */}
         <div
+          className="nego-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "minmax(0,1fr) minmax(0,340px)",
@@ -346,14 +683,15 @@ export function NegotiationCenterPage() {
             alignItems: "start",
           }}
         >
-          {/* ════ LEFT: FORM ════ */}
+          {/* LEFT COLUMN */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {/* ── SECTION 1: YOUR DETAILS ── */}
+            {/* YOUR DETAILS */}
             <FormCard
               title="Your Details"
               icon={<Users size={16} color={T.textMid} />}
             >
               <div
+                className="g2"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -376,6 +714,7 @@ export function NegotiationCenterPage() {
                 </Field>
               </div>
               <div
+                className="g2"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -416,7 +755,7 @@ export function NegotiationCenterPage() {
               </div>
             </FormCard>
 
-            {/* ── SECTION 2: SUPPLIER & ORDER ── */}
+            {/* SUPPLIER & ORDER */}
             <FormCard
               title="Supplier & Order Details"
               icon={<Building2 size={16} color={T.textMid} />}
@@ -444,8 +783,6 @@ export function NegotiationCenterPage() {
                   ))}
                 </select>
               </Field>
-
-              {/* Supplier quick info */}
               {supplier && (
                 <div
                   style={{
@@ -491,7 +828,6 @@ export function NegotiationCenterPage() {
                 </div>
               )}
 
-              {/* Products */}
               <div style={{ marginTop: 16 }}>
                 <div
                   style={{
@@ -509,6 +845,7 @@ export function NegotiationCenterPage() {
                   {products.map((p, i) => (
                     <div
                       key={i}
+                      className="prod-row"
                       style={{ display: "flex", gap: 8, alignItems: "center" }}
                     >
                       <SI
@@ -517,7 +854,7 @@ export function NegotiationCenterPage() {
                         onChange={(e) =>
                           updateProduct(i, "name", e.target.value)
                         }
-                        style={{ flex: 2 }}
+                        style={{ flex: 2, minWidth: 0 }}
                       />
                       <SI
                         type="number"
@@ -526,7 +863,7 @@ export function NegotiationCenterPage() {
                         onChange={(e) =>
                           updateProduct(i, "quantity", Number(e.target.value))
                         }
-                        style={{ flex: 0, width: 90 }}
+                        style={{ width: 70, flexShrink: 0 }}
                       />
                       <select
                         value={p.unit}
@@ -534,11 +871,11 @@ export function NegotiationCenterPage() {
                           updateProduct(i, "unit", e.target.value)
                         }
                         style={{
-                          padding: "11px 10px",
+                          padding: "11px 6px",
                           borderRadius: 10,
                           border: `1px solid ${T.border}`,
                           background: T.bg,
-                          fontSize: 13,
+                          fontSize: 12,
                           color: T.textMid,
                           outline: "none",
                           fontFamily: T.font,
@@ -593,15 +930,14 @@ export function NegotiationCenterPage() {
                     color: T.textMid,
                     cursor: "pointer",
                     fontFamily: T.font,
-                    transition: "all 0.15s",
                   }}
                 >
                   <Plus size={13} /> Add Product
                 </button>
               </div>
 
-              {/* Value + discount */}
               <div
+                className="g2"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
@@ -662,7 +998,6 @@ export function NegotiationCenterPage() {
                 </Field>
               </div>
 
-              {/* Savings preview */}
               <div
                 style={{
                   marginTop: 12,
@@ -673,6 +1008,8 @@ export function NegotiationCenterPage() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  gap: 12,
+                  flexWrap: "wrap",
                 }}
               >
                 <div
@@ -693,12 +1030,11 @@ export function NegotiationCenterPage() {
               </div>
             </FormCard>
 
-            {/* ── SECTION 3: EMAIL GOAL & TONE ── */}
+            {/* GOAL & TONE */}
             <FormCard
               title="Email Goal & Tone"
               icon={<Mail size={16} color={T.textMid} />}
             >
-              {/* Goal selector */}
               <div style={{ marginBottom: 16 }}>
                 <div
                   style={{
@@ -711,6 +1047,7 @@ export function NegotiationCenterPage() {
                   What's the main goal?
                 </div>
                 <div
+                  className="goals-grid"
                   style={{
                     display: "grid",
                     gridTemplateColumns:
@@ -759,8 +1096,6 @@ export function NegotiationCenterPage() {
                   ))}
                 </div>
               </div>
-
-              {/* Tone selector */}
               <div>
                 <div
                   style={{
@@ -772,7 +1107,10 @@ export function NegotiationCenterPage() {
                 >
                   Email Tone
                 </div>
-                <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div
+                  className="tones-row"
+                  style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
+                >
                   {TONES.map((t) => (
                     <button
                       key={t.id}
@@ -800,7 +1138,7 @@ export function NegotiationCenterPage() {
               </div>
             </FormCard>
 
-            {/* ── SECTION 4: EXTRA CONTEXT ── */}
+            {/* EXTRA CONTEXT */}
             <FormCard
               title="Extra Context"
               icon={<Sparkles size={16} color={T.textMid} />}
@@ -866,7 +1204,7 @@ export function NegotiationCenterPage() {
               </div>
             </FormCard>
 
-            {/* ── GENERATE BUTTON ── */}
+            {/* GENERATE BUTTON */}
             <button
               onClick={handleGenerate}
               disabled={isGenerating}
@@ -904,7 +1242,7 @@ export function NegotiationCenterPage() {
                       animation: "spin 0.7s linear infinite",
                       display: "inline-block",
                     }}
-                  />
+                  />{" "}
                   AI is Writing Your Email…
                 </>
               ) : (
@@ -915,19 +1253,18 @@ export function NegotiationCenterPage() {
               )}
             </button>
 
-            {/* ── GENERATED EMAIL ── */}
+            {/* GENERATED EMAIL */}
             {generatedEmail && (
               <div
                 style={{
                   background: T.bgWhite,
                   border: `1px solid ${T.border}`,
                   borderRadius: 20,
-                  padding: 28,
+                  padding: "clamp(16px,3vw,28px)",
                   boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
                   animation: "fadeIn 0.35s ease",
                 }}
               >
-                {/* Header */}
                 <div
                   style={{
                     display: "flex",
@@ -999,7 +1336,6 @@ export function NegotiationCenterPage() {
                   </div>
                 </div>
 
-                {/* Subject */}
                 <div style={{ marginBottom: 14 }}>
                   <div
                     style={{
@@ -1022,13 +1358,13 @@ export function NegotiationCenterPage() {
                       fontSize: 14,
                       fontWeight: 700,
                       color: "#7A5800",
+                      wordBreak: "break-word",
                     }}
                   >
                     {generatedEmail.subject}
                   </div>
                 </div>
 
-                {/* Body */}
                 <div style={{ marginBottom: 20 }}>
                   <div
                     style={{
@@ -1061,7 +1397,6 @@ export function NegotiationCenterPage() {
                   </div>
                 </div>
 
-                {/* Key selling points tags */}
                 {generatedEmail.keyPoints && (
                   <div style={{ marginBottom: 20 }}>
                     <div
@@ -1097,8 +1432,8 @@ export function NegotiationCenterPage() {
                   </div>
                 )}
 
-                {/* Actions */}
                 <div
+                  className="action-row"
                   style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr 1fr",
@@ -1131,8 +1466,9 @@ export function NegotiationCenterPage() {
             )}
           </div>
 
-          {/* ════ RIGHT SIDEBAR ════ */}
+          {/* RIGHT SIDEBAR — desktop only */}
           <div
+            className="d-sidebar"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -1141,377 +1477,90 @@ export function NegotiationCenterPage() {
               top: 80,
             }}
           >
-            {/* AI Engine card */}
-            <div
-              style={{
-                background: "#0D0D0D",
-                border: `1px solid rgba(255,255,255,0.07)`,
-                borderRadius: 20,
-                padding: 24,
-                boxShadow: `0 0 0 1px ${T.goldBorder}, 0 8px 32px rgba(255,184,0,0.08)`,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  marginBottom: 16,
-                }}
-              >
-                <div
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 9,
-                    background: T.goldSoft,
-                    border: `1px solid ${T.goldBorder}`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Zap size={15} color={T.gold} />
-                </div>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>
-                    AI Engine
-                  </div>
-                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
-                    Llama 3.1 · Groq API
-                  </div>
-                </div>
-              </div>
-              {[
-                {
-                  label: "Generation Speed",
-                  val: "2.8s",
-                  pct: 95,
-                  color: "#22C55E",
-                },
-                {
-                  label: "Quality Score",
-                  val: "9.2/10",
-                  pct: 92,
-                  color: T.gold,
-                },
-                {
-                  label: "Success Rate",
-                  val: "87%",
-                  pct: 87,
-                  color: "#A78BFA",
-                },
-              ].map((stat) => (
-                <div key={stat.label} style={{ marginBottom: 14 }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginBottom: 5,
-                    }}
-                  >
-                    <span
-                      style={{ fontSize: 12, color: "rgba(255,255,255,0.45)" }}
-                    >
-                      {stat.label}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 700,
-                        color: stat.color,
-                      }}
-                    >
-                      {stat.val}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      height: 4,
-                      background: "rgba(255,255,255,0.06)",
-                      borderRadius: 100,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: `${stat.pct}%`,
-                        background: stat.color,
-                        borderRadius: 100,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 8,
-                  marginTop: 16,
-                }}
-              >
-                {[
-                  "Context-aware negotiation",
-                  "Indian B2B market trained",
-                  "Multi-language support (soon)",
-                ].map((f) => (
-                  <div
-                    key={f}
-                    style={{
-                      display: "flex",
-                      gap: 8,
-                      fontSize: 12,
-                      color: "rgba(255,255,255,0.4)",
-                    }}
-                  >
-                    <CheckCircle
-                      size={13}
-                      color={T.gold}
-                      style={{ flexShrink: 0, marginTop: 1 }}
-                    />
-                    {f}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Savings summary */}
-            <div
-              style={{
-                background: T.bgWhite,
-                border: `1px solid ${T.border}`,
-                borderRadius: 18,
-                padding: 22,
-                boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  color: T.textDark,
-                  marginBottom: 14,
-                }}
-              >
-                Your Deal Summary
-              </div>
-              {[
-                {
-                  label: "Order Value",
-                  val: `₹${totalValue.toLocaleString()}`,
-                  color: T.textDark,
-                },
-                {
-                  label: "Target Disc.",
-                  val: `${targetDiscount}%`,
-                  color: T.gold,
-                },
-                {
-                  label: "Est. Savings",
-                  val: `₹${estimatedSavings.toLocaleString()}`,
-                  color: "#22C55E",
-                },
-                {
-                  label: "Group Size",
-                  val: `${memberCount} retailers`,
-                  color: "#6474F0",
-                },
-              ].map((row) => (
-                <div
-                  key={row.label}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "9px 0",
-                    borderBottom: `1px dashed ${T.borderDash}`,
-                  }}
-                >
-                  <span style={{ fontSize: 12, color: T.textLight }}>
-                    {row.label}
-                  </span>
-                  <span
-                    style={{ fontSize: 14, fontWeight: 800, color: row.color }}
-                  >
-                    {row.val}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Pro tips collapsible */}
-            <div
-              style={{
-                background: T.bgWhite,
-                border: `1px solid ${T.border}`,
-                borderRadius: 18,
-                overflow: "hidden",
-                boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
-              }}
-            >
-              <button
-                onClick={() => setShowTips(!showTips)}
-                style={{
-                  width: "100%",
-                  padding: "16px 20px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: T.font,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: T.textDark,
-                  }}
-                >
-                  <TrendingUp size={15} /> Negotiation Pro Tips
-                </div>
-                {showTips ? (
-                  <ChevronUp size={15} color={T.textLight} />
-                ) : (
-                  <ChevronDown size={15} color={T.textLight} />
-                )}
-              </button>
-              {showTips && (
-                <div
-                  style={{
-                    padding: "0 20px 20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 8,
-                    borderTop: `1px dashed ${T.borderDash}`,
-                    paddingTop: 16,
-                  }}
-                >
-                  {[
-                    {
-                      emoji: "💡",
-                      tip: "Mention your group size first — it shows combined buying power that suppliers can't ignore.",
-                    },
-                    {
-                      emoji: "📞",
-                      tip: "End your email with a call-to-action — ask for a 15-minute call, not just a reply.",
-                    },
-                    {
-                      emoji: "💳",
-                      tip: "Highlight payment reliability. Guaranteed payment within 48hrs is a huge supplier motivator.",
-                    },
-                    {
-                      emoji: "📅",
-                      tip: "Mention repeat order frequency. Monthly orders are more valuable than a one-time bulk deal.",
-                    },
-                    {
-                      emoji: "🤝",
-                      tip: 'Offer a "pilot order" at your target price. Lower risk entry gets more supplier yes-es.',
-                    },
-                    {
-                      emoji: "📊",
-                      tip: "Include the rupee value of savings you're asking for — makes it concrete, not abstract.",
-                    },
-                  ].map((t, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: "flex",
-                        gap: 10,
-                        padding: "10px 12px",
-                        background: T.bg,
-                        borderRadius: 10,
-                        fontSize: 12,
-                        color: T.textMid,
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      <span style={{ flexShrink: 0 }}>{t.emoji}</span> {t.tip}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* What to include reminder */}
-            <div
-              style={{
-                background: T.goldSoft,
-                border: `1px solid ${T.goldBorder}`,
-                borderRadius: 16,
-                padding: 20,
-              }}
-            >
-              <div
-                style={{ display: "flex", gap: 8, alignItems: "flex-start" }}
-              >
-                <AlertCircle
-                  size={15}
-                  color="#7A5800"
-                  style={{ flexShrink: 0, marginTop: 1 }}
-                />
-                <div>
-                  <div
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: "#7A5800",
-                      marginBottom: 8,
-                    }}
-                  >
-                    For Best Results
-                  </div>
-                  <div
-                    style={{ display: "flex", flexDirection: "column", gap: 5 }}
-                  >
-                    {[
-                      "Fill in your actual group name",
-                      "Set a realistic discount (15–25%)",
-                      "Add all products you want to order",
-                      "Mention any deadline or urgency",
-                    ].map((tip) => (
-                      <div
-                        key={tip}
-                        style={{
-                          display: "flex",
-                          gap: 6,
-                          fontSize: 12,
-                          color: "#7A5800",
-                        }}
-                      >
-                        <span>•</span> {tip}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SidebarContent />
           </div>
         </div>
       </div>
 
       <style>{`
-        @keyframes spin    { to { transform: rotate(360deg); } }
-        @keyframes fadeIn  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        @keyframes spin   { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         * { box-sizing: border-box; }
-        @media (max-width: 860px) {
+
+        /* Mobile sidebar accordion — hidden on desktop */
+        .m-sidebar-wrap { display: none; }
+
+        /* ════════════════════════════════════════
+           MOBILE ONLY  ≤ 768 px
+           Strict rule: NOTHING above 768px changes
+        ════════════════════════════════════════ */
+        @media (max-width: 768px) {
+
+          /* Show mobile accordion */
+          .m-sidebar-wrap {
+            display: block;
+            background: ${T.bgWhite};
+            border: 1px solid ${T.border};
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+          }
+          .m-sidebar-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: none;
+            border: none;
+            font-family: ${T.font};
+            font-size: 14px;
+            font-weight: 700;
+            color: ${T.textDark};
+            cursor: pointer;
+            padding: 0;
+          }
+
+          /* Hide desktop sidebar */
+          .d-sidebar { display: none !important; }
+
+          /* Stack main 2-col grid to 1 col */
           .nego-grid { grid-template-columns: 1fr !important; }
+
+          /* Stack all internal 2-col grids */
+          .g2 { grid-template-columns: 1fr !important; }
+
+          /* Goals: 2 per row on mobile (still readable) */
+          .goals-grid { grid-template-columns: 1fr 1fr !important; }
+          .goals-grid button { padding: 10px 10px !important; }
+          .goals-grid button div:first-child { font-size: 12px !important; }
+          .goals-grid button div:last-child  { font-size: 10px !important; display: none; }
+
+          /* Tone buttons: wrap into 2x2 */
+          .tones-row { gap: 6px !important; }
+          .tones-row button { font-size: 12px !important; padding: 8px 12px !important; }
+
+          /* Product row: name full width, qty+unit+trash on same line below */
+          .prod-row { flex-wrap: wrap; }
+          .prod-row > input:first-child { flex: 1 1 100% !important; width: 100% !important; }
+          .prod-row > input:nth-child(2) { flex: 1 1 80px; width: auto !important; }
+          .prod-row > select { flex-shrink: 0; }
+
+          /* Action buttons: stack */
+          .action-row { grid-template-columns: 1fr !important; }
         }
-        textarea:focus, select:focus { outline: none; border-color: #111 !important; box-shadow: 0 0 0 3px rgba(0,0,0,0.06) !important; }
+
+        textarea:focus, select:focus {
+          outline: none;
+          border-color: #111 !important;
+          box-shadow: 0 0 0 3px rgba(0,0,0,0.06) !important;
+        }
       `}</style>
     </div>
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   MICRO COMPONENTS
-───────────────────────────────────────────────────────────────────────────── */
+/* ── Micro components — identical to original ── */
 function FormCard({
   title,
   icon,

@@ -1,4 +1,5 @@
 import { Toaster } from "sonner";
+import "./bulqit-mobile.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -41,7 +42,10 @@ const App = () => (
             <Route path="/email-result" element={<EmailResultPage />} />
             <Route path="/analytics" element={<AnalyticsPage />} />
             <Route path="/suppliers" element={<SuppliersPage />} />
-            <Route path="/supplier/register" element={<SupplierRegistrationPage />} />
+            <Route
+              path="/supplier/register"
+              element={<SupplierRegistrationPage />}
+            />
             <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
             <Route path="/buyers" element={<BuyersDirectoryPage />} />
             <Route path="/negotiate" element={<NegotiationCenterPage />} />

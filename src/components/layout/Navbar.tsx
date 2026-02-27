@@ -1,5 +1,5 @@
 ﻿import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import {
@@ -35,10 +35,26 @@ const T = {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { isAuthenticated, user, logout } = useAuth();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [open]);
 
   return (
     <nav
@@ -228,9 +244,21 @@ export default function Navbar() {
         </div>
 
         <button
-          className="md:hidden p-2"
+          className="md:hidden"
           onClick={() => setOpen(!open)}
-          style={{ color: T.textDark }}
+          style={{
+            color: T.textDark,
+            padding: "4px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            width: "32px",
+            height: "32px",
+          }}
+          aria-label="Toggle menu"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
@@ -238,10 +266,15 @@ export default function Navbar() {
 
       {open && (
         <div
-          className="md:hidden px-4 pb-4"
-          style={{ borderTop: `1px solid ${T.border}`, background: T.bg }}
+          ref={menuRef}
+          className="md:hidden"
+          style={{
+            borderTop: `1px solid ${T.border}`,
+            background: T.bg,
+            padding: "12px 16px",
+          }}
         >
-          <div className="py-3">
+          <div style={{ marginBottom: 8 }}>
             <LanguageSwitcher />
           </div>
           {isAuthenticated &&

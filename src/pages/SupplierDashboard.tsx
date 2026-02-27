@@ -29,6 +29,7 @@ import {
   Plus,
   Edit2,
   Award,
+  Menu,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -693,6 +694,7 @@ export function SupplierDashboard() {
   const [langOpen, setLangOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [prices, setPrices] = useState<Record<string, number>>(
     Object.fromEntries(PRODUCTS_PRICE.map((p) => [p.id, p.basePrice])),
   );
@@ -713,6 +715,7 @@ export function SupplierDashboard() {
 
   return (
     <div
+      className="supplier-dashboard"
       style={{
         fontFamily: T.font,
         minHeight: "100vh",
@@ -721,12 +724,29 @@ export function SupplierDashboard() {
         background: T.bg,
         backgroundImage: `linear-gradient(${T.borderDash} 1px, transparent 1px), linear-gradient(90deg, ${T.borderDash} 1px, transparent 1px)`,
         backgroundSize: "80px 80px",
+        position: "relative",
       }}
     >
+      {/* Backdrop overlay - click to close sidebar */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 9998,
+          }}
+        />
+      )}
       {/* ══════════════════════════════════
           SIDEBAR
       ══════════════════════════════════ */}
       <aside
+        className={`sd-sidebar ${sidebarOpen ? "open" : ""}`}
         style={{
           width: 220,
           flexShrink: 0,
@@ -734,10 +754,13 @@ export function SupplierDashboard() {
           borderRight: "1px solid rgba(255,255,255,0.06)",
           display: "flex",
           flexDirection: "column",
-          position: "sticky",
+          position: sidebarOpen ? "fixed" : "sticky",
+          left: sidebarOpen ? 0 : undefined,
           top: 0,
           height: "100vh",
           overflowY: "auto",
+          zIndex: 9999,
+          transition: "left 0.3s ease",
         }}
       >
         {/* Logo */}
@@ -930,6 +953,7 @@ export function SupplierDashboard() {
       >
         {/* TOP BAR */}
         <header
+          className="sd-header"
           style={{
             position: "sticky",
             top: 0,
@@ -946,6 +970,23 @@ export function SupplierDashboard() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {/* Mobile hamburger button */}
+            <button
+              className="sd-hamburger"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{
+                display: "none",
+                width: 40,
+                height: 40,
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Menu size={24} color={T.textDark} />
+            </button>
             <h2
               style={{
                 fontSize: 18,
