@@ -1867,13 +1867,25 @@ export default function LandingPage() {
             padding: 0 !important;
             max-width: 100% !important;
           }
-          .bulqit-rolling-wrapper { max-width: 88vw !important; overflow: hidden !important; }
+          .bulqit-rolling-wrapper { max-width: 92vw !important; overflow: visible !important; display: flex !important; justify-content: center !important; width: 100% !important; }
           .bulqit-rolling-pill-word {
-            font-size: clamp(26px, 8.5vw, 38px) !important;
-            padding: 8px 16px !important;
-            max-width: 86vw !important;
+            font-size: clamp(24px, 8vw, 36px) !important;
+            padding: 10px 18px !important;
+            max-width: 92vw !important;
             white-space: normal !important;
             text-align: center !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+            /* Enhanced glassmorphism for mobile */
+            background: var(--pill-tint-bg, rgba(236,131,60,0.15)) !important;
+            backdrop-filter: blur(12px) saturate(1.4) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(1.4) !important;
+            border: 1px solid var(--pill-tint-border, rgba(236,131,60,0.4)) !important;
+            outline: 1px solid rgba(255,255,255,0.5) !important;
+            box-shadow: 
+              0 4px 16px -2px var(--pill-tint-glow, rgba(236,131,60,0.25)),
+              0 2px 6px rgba(0,0,0,0.1),
+              inset 0 1px 0 rgba(255,255,255,0.6) !important;
           }
           .bulqit-banner { max-width: calc(100vw - 40px) !important; flex-wrap: wrap !important; font-size: 12px !important; }
 
