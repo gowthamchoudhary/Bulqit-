@@ -20,6 +20,7 @@ import {
   ArrowLeft,
   Award,
   Globe,
+  Info,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -828,6 +829,25 @@ export function SupplierRegistrationPage() {
           <p style={{ fontSize: 14, color: T.textMid, lineHeight: 1.7 }}>
             {s("pageSub")}
           </p>
+          {/* Demo mode note */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              marginTop: 12,
+              padding: "6px 12px",
+              background: "rgba(255,184,0,0.08)",
+              border: "1px dashed rgba(255,184,0,0.25)",
+              borderRadius: 8,
+              fontSize: 11,
+              color: "rgba(255,184,0,0.8)",
+              fontFamily: T.font,
+            }}
+          >
+            <Info size={12} />
+            <span>Demo mode: use random digits for GST/PAN/phone numbers</span>
+          </div>
         </div>
 
         {/* Step indicator */}

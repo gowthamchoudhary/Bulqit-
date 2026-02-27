@@ -694,11 +694,11 @@ export function SupplierDashboard() {
   const [langOpen, setLangOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [editingPrice, setEditingPrice] = useState<string | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [prices, setPrices] = useState<Record<string, number>>(
     Object.fromEntries(PRODUCTS_PRICE.map((p) => [p.id, p.basePrice])),
   );
   const [tempPrice, setTempPrice] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [orderStatuses, setOrderStatuses] = useState<Record<string, string>>(
     Object.fromEntries(ORDERS.map((o) => [o.id, o.status])),
   );
@@ -724,29 +724,28 @@ export function SupplierDashboard() {
         background: T.bg,
         backgroundImage: `linear-gradient(${T.borderDash} 1px, transparent 1px), linear-gradient(90deg, ${T.borderDash} 1px, transparent 1px)`,
         backgroundSize: "80px 80px",
-        position: "relative",
       }}
     >
-      {/* Backdrop overlay - click to close sidebar */}
+      {/* Mobile overlay backdrop */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
+          className="sd-mobile-overlay"
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            inset: 0,
             background: "rgba(0,0,0,0.5)",
-            zIndex: 9998,
+            zIndex: 998,
+            display: "none",
           }}
         />
       )}
+
       {/* ══════════════════════════════════
           SIDEBAR
       ══════════════════════════════════ */}
       <aside
-        className={`sd-sidebar ${sidebarOpen ? "open" : ""}`}
+        className={`sd-sidebar${sidebarOpen ? " open" : ""}`}
         style={{
           width: 220,
           flexShrink: 0,
@@ -754,13 +753,10 @@ export function SupplierDashboard() {
           borderRight: "1px solid rgba(255,255,255,0.06)",
           display: "flex",
           flexDirection: "column",
-          position: sidebarOpen ? "fixed" : "sticky",
-          left: sidebarOpen ? 0 : undefined,
+          position: "sticky",
           top: 0,
           height: "100vh",
           overflowY: "auto",
-          zIndex: 9999,
-          transition: "left 0.3s ease",
         }}
       >
         {/* Logo */}
@@ -768,29 +764,49 @@ export function SupplierDashboard() {
           style={{
             padding: "24px 20px 20px",
             borderBottom: "1px solid rgba(255,255,255,0.06)",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
           }}
         >
-          <div
+          <div>
+            <div
+              style={{
+                fontSize: 20,
+                fontWeight: 900,
+                letterSpacing: "-0.04em",
+                color: "#fff",
+              }}
+            >
+              bulqit<span style={{ color: T.gold }}>.</span>
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                marginTop: 2,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+              }}
+            >
+              Supplier Portal
+            </div>
+          </div>
+          {/* Close button — only visible on mobile via CSS */}
+          <button
+            className="sd-sidebar-close"
+            onClick={() => setSidebarOpen(false)}
             style={{
-              fontSize: 20,
-              fontWeight: 900,
-              letterSpacing: "-0.04em",
-              color: "#fff",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "rgba(255,255,255,0.4)",
+              padding: 4,
+              display: "none",
             }}
           >
-            bulqit<span style={{ color: T.gold }}>.</span>
-          </div>
-          <div
-            style={{
-              fontSize: 11,
-              color: "rgba(255,255,255,0.3)",
-              marginTop: 2,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-            }}
-          >
-            Supplier Portal
-          </div>
+            <X size={18} />
+          </button>
         </div>
 
         {/* Profile snippet */}
@@ -944,6 +960,7 @@ export function SupplierDashboard() {
           MAIN CONTENT
       ══════════════════════════════════ */}
       <div
+        className="sd-main"
         style={{
           flex: 1,
           minWidth: 0,
@@ -970,22 +987,24 @@ export function SupplierDashboard() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {/* Mobile hamburger button */}
+            {/* Hamburger — only shown on mobile via CSS */}
             <button
               className="sd-hamburger"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={() => setSidebarOpen(true)}
               style={{
                 display: "none",
-                width: 40,
-                height: 40,
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "#0D0D0D",
                 border: "none",
-                background: "transparent",
-                cursor: "pointer",
                 alignItems: "center",
                 justifyContent: "center",
+                cursor: "pointer",
+                flexShrink: 0,
               }}
             >
-              <Menu size={24} color={T.textDark} />
+              <Menu size={18} color="#fff" />
             </button>
             <h2
               style={{
